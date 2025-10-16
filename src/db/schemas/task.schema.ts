@@ -31,7 +31,7 @@ export const taskSchemaLiteral = {
       default: { x: 0, y: 0 },
     },
   },
-  required: ["userId", "title", "position"],
+  required: ["id", "userId", "title", "position"],
 } as const;
 
 const schemaTyped = toTypedRxJsonSchema(taskSchemaLiteral);

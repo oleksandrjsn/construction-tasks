@@ -9,6 +9,7 @@ import type {
   UpdateChecklistRequest,
 } from "./types";
 import { getChecklistItem } from "./utils";
+import { v4 as uuidv4 } from "uuid";
 
 export class ChecklistService {
   static async getChecklist(
@@ -58,7 +59,10 @@ export class ChecklistService {
       throw new Error("Checklist for this task already exists.");
     }
 
-    const newChecklist = await db.checklists.insert(checklistData);
+    const newChecklist = await db.checklists.insert({
+      ...checklistData,
+      id: uuidv4(),
+    });
     const checkListJson = newChecklist.toJSON();
 
     let insertedItems: ChecklistItemDocType[] = [];
@@ -69,6 +73,7 @@ export class ChecklistService {
         checklistId: checkListJson.id!,
         userId: checklistData.userId,
         status: "not_started" as const,
+        id: uuidv4(),
       }));
       // TODO: Handle potential errors in bulkInsert
       const { error, success } = await db.checklistItems.bulkInsert(
@@ -150,6 +155,7 @@ export class ChecklistService {
     }
 
     const newItem = await db.checklistItems.insert({
+      id: uuidv4(),
       title: payload.title,
       checklistId: payload.checklistId,
       userId: payload.userId,

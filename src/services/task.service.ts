@@ -8,6 +8,7 @@ import type {
   TaskResponse,
   TaskWithChecklistsResponse,
 } from "./types";
+import { v4 as uuidv4 } from "uuid";
 
 export class TaskService {
   static async getTasks(userId: string): Promise<TaskResponse[]> {
@@ -49,7 +50,10 @@ export class TaskService {
 
   static async createTask(taskData: CreateTaskRequest): Promise<TaskResponse> {
     const db = await getDb();
-    const newTask = await db.tasks.insert(taskData);
+    const newTask = await db.tasks.insert({
+      ...taskData,
+      id: uuidv4(),
+    });
     const taskJson = newTask.toJSON();
 
     await ChecklistService.addChecklist({

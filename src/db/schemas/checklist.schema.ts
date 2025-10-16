@@ -25,7 +25,7 @@ export const checklistSchemaLiteral = {
       type: "string",
     },
   },
-  required: ["taskId", "userId"],
+  required: ["id", "taskId", "userId"],
 } as const;
 
 const schemaTyped = toTypedRxJsonSchema(checklistSchemaLiteral);

@@ -33,7 +33,7 @@ export const checklistItemSchemaLiteral = {
       description: "Optional message when resolving status",
     },
   },
-  required: ["checklistId", "userId", "title", "status"],
+  required: ["id", "checklistId", "userId", "title", "status"],
 } as const;
 
 const schemaTyped = toTypedRxJsonSchema(checklistItemSchemaLiteral);

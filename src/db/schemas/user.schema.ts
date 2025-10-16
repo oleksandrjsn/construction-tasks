@@ -19,7 +19,7 @@ export const userSchemaLiteral = {
       type: "string",
     },
   },
-  required: ["name"],
+  required: ["name", "id"],
 } as const;
 
 const schemaTyped = toTypedRxJsonSchema(userSchemaLiteral);
