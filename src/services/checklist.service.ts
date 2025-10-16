@@ -33,7 +33,7 @@ export class ChecklistService {
     const itemsJson = items.map((item) => item.toJSON());
 
     return {
-      id: checklistJson.id!,
+      id: checklistJson.id,
       title: checklistJson.title!,
       taskId: checklistJson.taskId,
       items: itemsJson.map(getChecklistItem),
@@ -70,7 +70,7 @@ export class ChecklistService {
     if (items && items.length > 0) {
       const itemsToInsert = items.map((item) => ({
         ...item,
-        checklistId: checkListJson.id!,
+        checklistId: checkListJson.id,
         userId: checklistData.userId,
         status: "not_started" as const,
         id: uuidv4(),
@@ -86,7 +86,7 @@ export class ChecklistService {
     }
 
     return {
-      id: checkListJson.id!,
+      id: checkListJson.id,
       title: checkListJson.title!,
       taskId: checkListJson.taskId,
       items: insertedItems.map(getChecklistItem),
@@ -115,7 +115,7 @@ export class ChecklistService {
     const itemsJson = items.map((item) => item.toJSON());
 
     return {
-      id: checklistJson.id!,
+      id: checklistJson.id,
       title: checklistJson.title!,
       taskId: checklistJson.taskId,
       items: itemsJson.map(getChecklistItem),

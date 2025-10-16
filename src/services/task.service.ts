@@ -17,7 +17,7 @@ export class TaskService {
     const tasksJson = tasks.map((task) => task.toJSON());
 
     return tasksJson.map((task) => ({
-      id: task.id!,
+      id: task.id,
       title: task.title,
       position: task.position,
     }));
@@ -41,7 +41,7 @@ export class TaskService {
     const checkList = await ChecklistService.getChecklist(userId, taskId);
 
     return {
-      id: taskJson.id!,
+      id: taskJson.id,
       title: taskJson.title!,
       checklist: checkList,
       position: taskJson.position,
@@ -61,12 +61,12 @@ export class TaskService {
       items: defaultChecklistItems.map((title) => ({
         title,
       })),
-      taskId: taskJson.id!,
+      taskId: taskJson.id,
       userId: taskData.userId,
     });
 
     return {
-      id: taskJson.id!,
+      id: taskJson.id,
       title: taskJson.title,
       position: taskJson.position,
     };

@@ -3,7 +3,7 @@ import type { UserResponse } from "./types";
 import { v4 as uuidv4 } from "uuid";
 
 export class UserService {
-  static async findOrCreateUser(name: string): Promise<UserResponse> {
+  static async login(name: string): Promise<UserResponse> {
     const db = await getDb();
     let user = await db.users.findOne({ selector: { name } }).exec();
     if (!user) {
@@ -13,7 +13,7 @@ export class UserService {
     const userJson = user.toJSON();
 
     return {
-      id: userJson.id!,
+      id: userJson.id,
       name: userJson.name,
     };
   }

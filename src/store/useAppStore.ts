@@ -11,7 +11,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   async login(username) {
     try {
-      const user = await UserService.findOrCreateUser(username);
+      const user = await UserService.login(username);
       set({ currentUser: user, isLoggedIn: true });
       get().loadUserData();
     } catch (error) {

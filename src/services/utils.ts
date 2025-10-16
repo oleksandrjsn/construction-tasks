@@ -4,7 +4,7 @@ import type { ChecklistItemResponse } from "./types";
 export const getChecklistItem = (
   entity: ChecklistItemDocType
 ): ChecklistItemResponse => ({
-  id: entity.id!,
+  id: entity.id,
   title: entity.title,
   status: entity.status,
   checklistId: entity.checklistId,
