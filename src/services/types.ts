@@ -6,7 +6,10 @@ export interface UserResponse {
 export interface TaskResponse {
   id: string;
   title: string;
-  description?: string;
+  position: {
+    x: number;
+    y: number;
+  };
 }
 
 export interface TaskWithChecklistsResponse extends TaskResponse {
@@ -28,9 +31,17 @@ export interface ChecklistItemResponse {
   statusMessage?: string;
 }
 
-export interface AddOrUpdateTaskRequest {
+export interface CreateTaskRequest {
   title: string;
   userId: string;
+  position: {
+    x: number;
+    y: number;
+  };
+}
+
+export interface UpdateTaskRequest extends Omit<CreateTaskRequest, "position"> {
+  id: string;
 }
 
 export interface AddChecklistRequest {

@@ -5,7 +5,6 @@ import type {
   AddChecklistRequest,
   ChecklistItemResponse,
   ChecklistResponse,
-  TaskWithChecklistsResponse,
   UpdateChecklistItemRequest,
   UpdateChecklistRequest,
 } from "./types";
@@ -15,7 +14,7 @@ export class ChecklistService {
   static async getChecklist(
     userId: string,
     taskId: string
-  ): Promise<TaskWithChecklistsResponse | null> {
+  ): Promise<ChecklistResponse | null> {
     const db = await getDb();
     const checklist = await db.checklists
       .findOne({ selector: { taskId, userId } })
@@ -35,12 +34,8 @@ export class ChecklistService {
     return {
       id: checklistJson.id!,
       title: checklistJson.title!,
-      checklist: {
-        id: checklistJson.id!,
-        title: checklistJson.title!,
-        taskId: checklistJson.taskId,
-        items: itemsJson.map(getChecklistItem),
-      },
+      taskId: checklistJson.taskId,
+      items: itemsJson.map(getChecklistItem),
     };
   }
 

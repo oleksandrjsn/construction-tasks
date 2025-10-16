@@ -3,13 +3,14 @@ import type { TaskDocType } from "../db/schemas/task.schema";
 import { ChecklistService } from "./checklist.service";
 import { defaultChecklistItems } from "./defaultChecklistItems";
 import type {
-  AddOrUpdateTaskRequest,
+  CreateTaskRequest,
+  UpdateTaskRequest,
   TaskResponse,
   TaskWithChecklistsResponse,
 } from "./types";
 
 export class TaskService {
-  static async getTasksByUser(userId: string): Promise<TaskResponse[]> {
+  static async getTasks(userId: string): Promise<TaskResponse[]> {
     const db = await getDb();
     const tasks = await db.tasks.find({ selector: { userId } }).exec();
     const tasksJson = tasks.map((task) => task.toJSON());
@@ -17,10 +18,11 @@ export class TaskService {
     return tasksJson.map((task) => ({
       id: task.id!,
       title: task.title,
+      position: task.position,
     }));
   }
 
-  static async getTaskByUserAndId(
+  static async getTask(
     userId: string,
     taskId: string
   ): Promise<TaskWithChecklistsResponse | null> {
@@ -40,11 +42,12 @@ export class TaskService {
     return {
       id: taskJson.id!,
       title: taskJson.title!,
-      checklist: checkList?.checklist || null,
+      checklist: checkList,
+      position: taskJson.position,
     };
   }
 
-  static async addTask(taskData: AddOrUpdateTaskRequest): Promise<TaskDocType> {
+  static async createTask(taskData: CreateTaskRequest): Promise<TaskResponse> {
     const db = await getDb();
     const newTask = await db.tasks.insert(taskData);
     const taskJson = newTask.toJSON();
@@ -58,16 +61,20 @@ export class TaskService {
       userId: taskData.userId,
     });
 
-    return taskJson;
+    return {
+      id: taskJson.id!,
+      title: taskJson.title,
+      position: taskJson.position,
+    };
   }
 
   static async updateTask(
-    taskData: AddOrUpdateTaskRequest
+    payload: UpdateTaskRequest
   ): Promise<TaskDocType | null> {
+    const { id, userId, ...taskData } = payload;
+
     const db = await getDb();
-    const task = await db.tasks
-      .findOne({ selector: { userId: taskData.userId, title: taskData.title } })
-      .exec();
+    const task = await db.tasks.findOne({ selector: { userId, id } }).exec();
 
     if (!task) {
       return null;
