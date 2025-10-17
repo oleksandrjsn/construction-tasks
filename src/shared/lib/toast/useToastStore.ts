@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { AppError } from "../errors/AppError";
 
 export interface Toast {
   id: string;
@@ -13,7 +12,7 @@ interface ToastState {
   toasts: Toast[];
   addToast: (toast: Omit<Toast, "id">) => void;
   removeToast: (id: string) => void;
-  showError: (error: AppError | Error | string) => void;
+  showError: (error: Error | Error | string) => void;
   showSuccess: (message: string, title?: string) => void;
   showWarning: (message: string, title?: string) => void;
   showInfo: (message: string, title?: string) => void;
@@ -50,10 +49,8 @@ export const useToastStore = create<ToastState>((set, get) => ({
     let title = "Error";
     let message = "";
 
-    if (error instanceof AppError) {
+    if (error instanceof Error) {
       title = error.name;
-      message = error.message;
-    } else if (error instanceof Error) {
       message = error.message;
     } else {
       message = error;

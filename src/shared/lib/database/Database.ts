@@ -15,50 +15,61 @@ import { checklistSchema } from "./schemas/checklist.schema";
 import { checklistItemSchema } from "./schemas/checklistItem.schema";
 
 export class Database {
+  private static instance: Database | null = null;
   private db: DatabaseType | null = null;
+  private initializing: Promise<DatabaseType> | null = null;
 
-  async init(): Promise<DatabaseType> {
-    if (this.db) {
-      return this.db;
+  private constructor() {}
+
+  public static getInstance(): Database {
+    if (!Database.instance) {
+      Database.instance = new Database();
     }
-
-    this.db = await createRxDatabase<DatabaseCollections>({
-      name: "construction_tasks_db",
-      storage: getRxStorageLocalstorage(),
-    });
-
-    await this.db.addCollections({
-      users: { schema: userSchema, conflictHandler: this.conflictHandler },
-      tasks: { schema: taskSchema, conflictHandler: this.conflictHandler },
-      checklists: {
-        schema: checklistSchema,
-        conflictHandler: this.conflictHandler,
-      },
-      checklistItems: {
-        schema: checklistItemSchema,
-        conflictHandler: this.conflictHandler,
-      },
-    });
-
-    return this.db;
+    return Database.instance;
   }
 
-  conflictHandler: RxConflictHandler<CollectionDocType> = {
-    isEqual: (oldDoc, newDoc) => {
-      return deepEqual(oldDoc, newDoc);
-    },
-    resolve: (input) => {
+  async init(): Promise<DatabaseType> {
+    if (this.db) return this.db;
+    if (this.initializing) return this.initializing;
+
+    this.initializing = (async () => {
+      const db = await createRxDatabase<DatabaseCollections>({
+        name: "construction_tasks_db",
+        storage: getRxStorageLocalstorage(),
+      });
+
+      await db.addCollections({
+        users: { schema: userSchema, conflictHandler: this.conflictHandler },
+        tasks: { schema: taskSchema, conflictHandler: this.conflictHandler },
+        checklists: {
+          schema: checklistSchema,
+          conflictHandler: this.conflictHandler,
+        },
+        checklistItems: {
+          schema: checklistItemSchema,
+          conflictHandler: this.conflictHandler,
+        },
+      });
+
+      this.db = db;
+      this.initializing = null;
+      return db;
+    })();
+
+    return this.initializing;
+  }
+
+  private conflictHandler: RxConflictHandler<CollectionDocType> = {
+    isEqual: (a, b) => deepEqual(a, b),
+    resolve: async ({ newDocumentState, realMasterState }) => {
       // Newer document wins.
-      const { newDocumentState, realMasterState } = input;
-      const result =
-        newDocumentState.updatedAt > realMasterState.updatedAt
-          ? newDocumentState
-          : realMasterState;
-      return Promise.resolve(result);
+      return newDocumentState.updatedAt > realMasterState.updatedAt
+        ? newDocumentState
+        : realMasterState;
     },
   };
 
-  get instance(): DatabaseType | null {
+  get instanceOrNull(): DatabaseType | null {
     return this.db;
   }
 

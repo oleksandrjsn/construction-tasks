@@ -1,9 +1,8 @@
-import type { DatabaseType } from "../../../shared/lib";
+import type { DatabaseType } from "../../../shared/lib/database";
 
 export interface DbContextValue {
   db: DatabaseType | null;
   isDbReady: boolean;
-  error: string | null;
 }
 
 export interface DbProviderProps {

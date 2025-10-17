@@ -1,13 +1,5 @@
-import {
-  AppError,
-  ConflictError,
-  DatabaseError,
-  NotFoundError,
-  ValidationError,
-} from "./AppError";
-
 interface ErrorInterceptor {
-  onError: (error: AppError) => void;
+  onError: (error: Error) => void;
 }
 
 class GlobalErrorHandler {
@@ -32,66 +24,42 @@ class GlobalErrorHandler {
     }
   }
 
-  handleError(error: unknown): AppError {
-    let appError: AppError;
+  handleError(error: unknown): Error {
+    let preparedError: Error;
 
-    if (error instanceof AppError) {
-      appError = error;
-    } else if (error instanceof Error) {
-      appError = this.mapErrorToAppError(error);
-    } else if (typeof error === "string") {
-      appError = new AppError(error);
+    if (error instanceof Error) {
+      preparedError = error;
     } else {
-      appError = new AppError(
-        "An unknown error occurred",
-        "UNKNOWN_ERROR",
-        500,
-        false
-      );
+      preparedError = new Error("Unknown error occurred");
     }
 
     this.interceptors.forEach((interceptor) => {
       try {
-        interceptor.onError(appError);
+        interceptor.onError(preparedError);
       } catch (e) {
         console.error("Error in error interceptor:", e);
       }
     });
 
-    return appError;
-  }
-
-  private mapErrorToAppError(error: Error): AppError {
-    if (error.message.includes("not found")) {
-      return new NotFoundError(error.message);
-    }
-
-    if (error.message.includes("already exists")) {
-      return new ConflictError(error.message);
-    }
-
-    if (
-      error.message.includes("required") ||
-      error.message.includes("invalid")
-    ) {
-      return new ValidationError(error.message);
-    }
-
-    if (
-      error.message.includes("database") ||
-      error.message.includes("connection")
-    ) {
-      return new DatabaseError(error.message, error);
-    }
-
-    return new AppError(error.message, "UNKNOWN_ERROR", 500, false);
+    console.debug("Error handled by interceptors:", preparedError.message);
+    return preparedError;
   }
 
   async wrapAsync<T>(asyncFn: () => Promise<T>): Promise<T> {
     try {
       return await asyncFn();
     } catch (error) {
-      throw this.handleError(error);
+      this.handleError(error);
+      return undefined as T;
+    }
+  }
+
+  wrapSync<T>(syncFn: () => T): T {
+    try {
+      return syncFn();
+    } catch (error) {
+      this.handleError(error);
+      return undefined as T;
     }
   }
 }

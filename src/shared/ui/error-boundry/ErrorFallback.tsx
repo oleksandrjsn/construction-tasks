@@ -1,13 +1,9 @@
-import { AppError } from "../../lib/errors/AppError";
-
 interface ErrorFallbackProps {
   error: Error;
   retry: () => void;
 }
 
 export const ErrorFallback = ({ error, retry }: ErrorFallbackProps) => {
-  const isAppError = error instanceof AppError;
-
   return (
     <div className="p-5 m-5 border border-red-400 rounded-lg bg-red-50 text-red-800">
       <h2 className="text-xl font-semibold mb-4">Something went wrong</h2>
@@ -16,18 +12,11 @@ export const ErrorFallback = ({ error, retry }: ErrorFallbackProps) => {
           Error details
         </summary>
         <p className="mb-2">
+          <strong>Type:</strong> {error.name}
+        </p>
+        <p className="mb-2">
           <strong>Message:</strong> {error.message}
         </p>
-        {isAppError && (
-          <>
-            <p className="mb-2">
-              <strong>Code:</strong> {error.code}
-            </p>
-            <p className="mb-2">
-              <strong>Type:</strong> {error.name}
-            </p>
-          </>
-        )}
         {import.meta.env.DEV && (
           <pre className="text-sm bg-gray-100 p-2 rounded mt-2 overflow-auto">
             {error.stack}

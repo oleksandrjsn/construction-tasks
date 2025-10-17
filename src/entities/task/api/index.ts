@@ -7,10 +7,6 @@ import type {
   TaskWithChecklistsResponse,
   UpdateTaskRequest,
 } from "../model";
-import {
-  NotFoundError,
-  ValidationError,
-} from "../../../shared/lib/errors/AppError";
 import { globalErrorHandler } from "../../../shared/lib/errors/GlobalErrorHandler";
 
 export class TaskService {
@@ -53,7 +49,7 @@ export class TaskService {
       );
 
       if (!task) {
-        throw new NotFoundError("Task", taskId);
+        throw new Error("Task not found");
       }
 
       const checkList = await this.checklistService.getChecklist(
@@ -73,7 +69,7 @@ export class TaskService {
   async createTask(taskData: CreateTaskRequest): Promise<TaskResponse> {
     return globalErrorHandler.wrapAsync(async () => {
       if (!taskData.title?.trim()) {
-        throw new ValidationError("Task title is required");
+        throw new Error("Task title cannot be empty");
       }
 
       const newTask = await this.taskRepository.create({

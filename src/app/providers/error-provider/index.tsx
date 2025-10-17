@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useToastStore } from "../../store";
-import type { AppError } from "../../../shared/lib/errors/AppError";
 import { globalErrorHandler } from "../../../shared/lib/errors/GlobalErrorHandler";
 
 interface ErrorProviderProps {
@@ -12,7 +11,7 @@ export const ErrorProvider = ({ children }: ErrorProviderProps) => {
 
   useEffect(() => {
     const interceptor = {
-      onError: (error: AppError) => {
+      onError: (error: Error) => {
         showError(error);
       },
     };

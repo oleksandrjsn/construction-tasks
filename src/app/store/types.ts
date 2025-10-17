@@ -1,18 +1,16 @@
-import type {
-  TaskResponse,
-  TaskWithChecklistsResponse,
-} from "../../entities/task/model";
 import type { UserResponse } from "../../entities/user";
 
 export interface AppState {
   currentUser: UserResponse | null;
+  isInitialized: boolean;
   isLoggedIn: boolean;
-  tasks: TaskResponse[];
-  taskDetails: TaskWithChecklistsResponse | null;
+  isLoading: boolean;
+  selectedTaskId: string | null;
 
   setCurrentUser: (user: UserResponse | null) => void;
+  setIsInitialized: (isInitialized: boolean) => void;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
-  setTasks: (tasks: TaskResponse[]) => void;
-  setTaskDetails: (taskDetails: TaskWithChecklistsResponse | null) => void;
+  setIsLoading: (isLoading: boolean) => void;
+  setSelectedTaskId: (taskId: string | null) => void;
   clearState: () => void;
 }
