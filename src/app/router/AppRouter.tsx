@@ -9,6 +9,7 @@ import { LoginPage } from "../../pages/login";
 import { BlueprintPage } from "../../pages/blueprint";
 import { useAppStore } from "../store";
 import { FullscreenLoader } from "../../shared/ui/loader";
+import { DashboardPage } from "../../pages/dashboard/ui/DashboardPage";
 
 const AUTH_ROUTES = ["/login"];
 
@@ -26,6 +27,7 @@ function AppRoutes() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/blueprint" element={<BlueprintPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
         <Route
           path="/"
           element={

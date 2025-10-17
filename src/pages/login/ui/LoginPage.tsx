@@ -1,8 +1,60 @@
+import { useState } from "react";
+import { Button, Input, UserIcon } from "../../../shared/ui";
+import { AuthLayout } from "../../../app/layouts";
+import { useAuth } from "../../../entities/user/model/useAuth";
+import { useAppStore } from "../../../app/store";
+
 export function LoginPage() {
+  const [username, setUsername] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { login } = useAuth();
+  const { setCurrentUser, setIsLoggedIn } = useAppStore();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!username.trim()) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const user = await login(username);
+      setCurrentUser(user);
+      setIsLoggedIn(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div>
-      <h1>Login Page</h1>
-      <p>Authentication will be implemented here</p>
-    </div>
+    <AuthLayout title="Welcome" subtitle="Sign in to your account">
+      <form onSubmit={handleLogin} className="space-y-4">
+        <Input
+          label="Username"
+          placeholder="Enter your username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          leftIcon={<UserIcon />}
+          fullWidth
+          disabled={isLoading}
+          autoComplete="username"
+          autoFocus
+        />
+
+        <Button
+          type="submit"
+          variant="primary"
+          size="md"
+          isLoading={isLoading}
+          disabled={!username.trim()}
+          fullWidth
+        >
+          Sign In
+        </Button>
+      </form>
+    </AuthLayout>
   );
 }

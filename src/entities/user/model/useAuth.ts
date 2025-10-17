@@ -31,6 +31,11 @@ export const useAuth = () => {
         });
       }
 
+      await UserSessionAPI.setSession({
+        id: user.id,
+        name: user.name,
+      });
+
       return {
         id: user.id,
         name: user.name,
@@ -44,5 +49,11 @@ export const useAuth = () => {
     });
   };
 
-  return { getProfile, login };
+  const logout = async () => {
+    return globalErrorHandler.wrapAsync(async () => {
+      await UserSessionAPI.clearSession();
+    });
+  };
+
+  return { getProfile, login, logout };
 };

@@ -1,8 +1,17 @@
+import { MainLayout } from "../../../app/layouts";
+import { Typography } from "../../../shared/ui";
+
 export function BlueprintPage() {
   return (
-    <div>
-      <h1>Blueprint Page</h1>
-      <p>Task management interface will be here</p>
-    </div>
+    <MainLayout>
+      <div>
+        <Typography variant="h1" color="primary">
+          Blueprint
+        </Typography>
+        <Typography variant="body1" color="muted" className="mt-2">
+          Construction task management interface
+        </Typography>
+      </div>
+    </MainLayout>
   );
 }

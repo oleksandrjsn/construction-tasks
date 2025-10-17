@@ -20,4 +20,8 @@ export class UserSessionAPI {
     const token = JSON.stringify(user);
     sessionStorage.setItem(UserSessionAPI.sessionKey, token);
   }
+
+  static async clearSession() {
+    sessionStorage.removeItem(UserSessionAPI.sessionKey);
+  }
 }
