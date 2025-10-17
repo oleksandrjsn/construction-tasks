@@ -14,11 +14,14 @@ export const DbProvider: React.FC<DbProviderProps> = ({ children }) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    let databaseInstance: Database | null = null;
+
     const initDb = async () => {
       try {
         setError(null);
         const database = new Database();
         const dbInstance = await database.init();
+        databaseInstance = database;
         setDb(dbInstance);
         setIsDbReady(true);
       } catch (err) {
@@ -30,6 +33,14 @@ export const DbProvider: React.FC<DbProviderProps> = ({ children }) => {
     };
 
     initDb();
+
+    return () => {
+      if (databaseInstance) {
+        databaseInstance.destroy().catch((err) => {
+          console.error("Error destroying database:", err);
+        });
+      }
+    };
   }, []);
 
   const contextValue: DbContextValue = {

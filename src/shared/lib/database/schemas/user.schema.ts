@@ -9,17 +9,23 @@ export const userSchemaLiteral = {
   version: 0,
   description: "describes a user",
   type: "object",
-  primaryKey: "id",
+  primaryKey: "name",
   properties: {
     id: {
       type: "string",
-      maxLength: 100,
     },
     name: {
       type: "string",
+      maxLength: 100,
+    },
+    updatedAt: {
+      type: "number",
+      minimum: 0,
+      maximum: Number.MAX_SAFE_INTEGER,
+      multipleOf: 1,
     },
   },
-  required: ["name", "id"],
+  required: ["name", "id", "updatedAt"],
 } as const;
 
 const schemaTyped = toTypedRxJsonSchema(userSchemaLiteral);

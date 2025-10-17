@@ -48,7 +48,7 @@ export class ChecklistRepository {
       return null;
     }
 
-    const updatedChecklist = await checklist.patch(updateData);
+    const updatedChecklist = await checklist.incrementalPatch(updateData);
     return updatedChecklist.toJSON();
   }
 

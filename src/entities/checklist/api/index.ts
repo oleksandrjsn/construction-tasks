@@ -66,6 +66,7 @@ export class ChecklistService {
       const newChecklist = await this.checklistRepository.create({
         ...checklistData,
         id: uuidv4(),
+        updatedAt: Date.now(),
       });
 
       let insertedItems: ChecklistItemResponse[] = [];
@@ -77,6 +78,7 @@ export class ChecklistService {
           userId: checklistData.userId,
           status: "not_started" as const,
           id: uuidv4(),
+          updatedAt: Date.now(),
         }));
 
         const insertedItemsData = await this.checklistItemRepository.bulkCreate(
@@ -156,6 +158,7 @@ export class ChecklistService {
         checklistId: payload.checklistId,
         userId: payload.userId,
         status: "not_started",
+        updatedAt: Date.now(),
       });
 
       return this.getChecklistItem(newItem);

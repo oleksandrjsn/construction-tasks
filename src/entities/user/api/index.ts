@@ -23,6 +23,7 @@ export class UserService {
         user = await this.userRepository.create({
           name: normalizedName,
           id: uuidv4(),
+          updatedAt: Date.now(),
         });
       }
 

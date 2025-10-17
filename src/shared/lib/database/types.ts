@@ -11,4 +11,10 @@ export type DatabaseCollections = {
   checklistItems: RxCollection<ChecklistItemDocType>;
 };
 
+export type CollectionDocType =
+  | UserDocType
+  | TaskDocType
+  | ChecklistDocType
+  | ChecklistItemDocType;
+
 export type DatabaseType = RxDatabase<DatabaseCollections>;

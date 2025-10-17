@@ -79,6 +79,7 @@ export class TaskService {
       const newTask = await this.taskRepository.create({
         ...taskData,
         id: uuidv4(),
+        updatedAt: Date.now(),
       });
 
       await this.checklistService.addChecklist({

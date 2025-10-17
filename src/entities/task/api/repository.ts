@@ -24,9 +24,7 @@ export class TaskRepository {
     return task ? task.toJSON() : null;
   }
 
-  async create(
-    taskData: Omit<TaskDocType, "id"> & { id: string }
-  ): Promise<TaskDocType> {
+  async create(taskData: TaskDocType): Promise<TaskDocType> {
     const newTask = await this.db.tasks.insert(taskData);
     return newTask.toJSON();
   }
@@ -44,7 +42,7 @@ export class TaskRepository {
       return null;
     }
 
-    const updatedTask = await task.patch(updateData);
+    const updatedTask = await task.incrementalPatch(updateData);
     return updatedTask.toJSON();
   }
 

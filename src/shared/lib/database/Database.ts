@@ -1,6 +1,14 @@
-import { createRxDatabase } from "rxdb/plugins/core";
+import {
+  createRxDatabase,
+  deepEqual,
+  type RxConflictHandler,
+} from "rxdb/plugins/core";
 import { getRxStorageLocalstorage } from "rxdb/plugins/storage-localstorage";
-import type { DatabaseCollections, DatabaseType } from "./types";
+import type {
+  CollectionDocType,
+  DatabaseCollections,
+  DatabaseType,
+} from "./types";
 import { userSchema } from "./schemas/user.schema";
 import { taskSchema } from "./schemas/task.schema";
 import { checklistSchema } from "./schemas/checklist.schema";
@@ -20,14 +28,35 @@ export class Database {
     });
 
     await this.db.addCollections({
-      users: { schema: userSchema },
-      tasks: { schema: taskSchema },
-      checklists: { schema: checklistSchema },
-      checklistItems: { schema: checklistItemSchema },
+      users: { schema: userSchema, conflictHandler: this.conflictHandler },
+      tasks: { schema: taskSchema, conflictHandler: this.conflictHandler },
+      checklists: {
+        schema: checklistSchema,
+        conflictHandler: this.conflictHandler,
+      },
+      checklistItems: {
+        schema: checklistItemSchema,
+        conflictHandler: this.conflictHandler,
+      },
     });
 
     return this.db;
   }
+
+  conflictHandler: RxConflictHandler<CollectionDocType> = {
+    isEqual: (oldDoc, newDoc) => {
+      return deepEqual(oldDoc, newDoc);
+    },
+    resolve: (input) => {
+      // Newer document wins.
+      const { newDocumentState, realMasterState } = input;
+      const result =
+        newDocumentState.updatedAt > realMasterState.updatedAt
+          ? newDocumentState
+          : realMasterState;
+      return Promise.resolve(result);
+    },
+  };
 
   get instance(): DatabaseType | null {
     return this.db;

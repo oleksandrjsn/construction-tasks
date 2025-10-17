@@ -67,7 +67,7 @@ export class ChecklistItemRepository {
       return null;
     }
 
-    const updatedItem = await item.patch(updateData);
+    const updatedItem = await item.incrementalPatch(updateData);
     return updatedItem.toJSON();
   }
 
