@@ -34,7 +34,7 @@ export class ChecklistService {
 
     return {
       id: checklistJson.id,
-      title: checklistJson.title!,
+      title: checklistJson.title,
       taskId: checklistJson.taskId,
       items: itemsJson.map(getChecklistItem),
     };
@@ -87,7 +87,7 @@ export class ChecklistService {
 
     return {
       id: checkListJson.id,
-      title: checkListJson.title!,
+      title: checkListJson.title,
       taskId: checkListJson.taskId,
       items: insertedItems.map(getChecklistItem),
     };
@@ -116,7 +116,7 @@ export class ChecklistService {
 
     return {
       id: checklistJson.id,
-      title: checklistJson.title!,
+      title: checklistJson.title,
       taskId: checklistJson.taskId,
       items: itemsJson.map(getChecklistItem),
     };

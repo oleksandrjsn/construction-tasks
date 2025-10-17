@@ -42,7 +42,7 @@ export class TaskService {
 
     return {
       id: taskJson.id,
-      title: taskJson.title!,
+      title: taskJson.title,
       checklist: checkList,
       position: taskJson.position,
     };

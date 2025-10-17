@@ -1,3 +1,10 @@
+type ChecklistItemStatus =
+  | "not_started"
+  | "in_progress"
+  | "blocked"
+  | "final_check"
+  | "done";
+
 export interface UserResponse {
   id: string;
   name: string;
@@ -27,7 +34,7 @@ export interface ChecklistItemResponse {
   id: string;
   checklistId: string;
   title: string;
-  status: "not_started" | "in_progress" | "blocked" | "final_check" | "done";
+  status: ChecklistItemStatus;
   statusMessage?: string;
 }
 
@@ -62,6 +69,6 @@ export interface AddChecklistItemRequest {
 export interface UpdateChecklistItemRequest
   extends Partial<AddChecklistItemRequest> {
   id: string;
-  status?: "not_started" | "in_progress" | "blocked" | "final_check" | "done";
+  status?: ChecklistItemStatus;
   statusMessage?: string;
 }
