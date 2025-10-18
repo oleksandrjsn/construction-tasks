@@ -18,6 +18,12 @@ export const userSchemaLiteral = {
       type: "string",
       maxLength: 100,
     },
+    createdAt: {
+      type: "number",
+      minimum: 0,
+      maximum: Number.MAX_SAFE_INTEGER,
+      multipleOf: 1,
+    },
     updatedAt: {
       type: "number",
       minimum: 0,
@@ -25,7 +31,7 @@ export const userSchemaLiteral = {
       multipleOf: 1,
     },
   },
-  required: ["name", "id", "updatedAt"],
+  required: ["name", "id", "updatedAt", "createdAt"],
 } as const;
 
 const schemaTyped = toTypedRxJsonSchema(userSchemaLiteral);

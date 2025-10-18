@@ -54,6 +54,7 @@ export class ChecklistService {
         ...checklistData,
         id: uuidv4(),
         updatedAt: Date.now(),
+        createdAt: Date.now(),
       });
     } catch (error) {
       globalErrorHandler.handleError(error);
@@ -87,6 +88,7 @@ export class ChecklistService {
         ...payload,
         id: uuidv4(),
         status: CHECK_LIST_STATUS.NOT_STARTED,
+        createdAt: Date.now(),
         updatedAt: Date.now(),
       });
     } catch (error) {

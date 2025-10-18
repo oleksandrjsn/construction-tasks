@@ -24,6 +24,12 @@ export const checklistSchemaLiteral = {
     title: {
       type: "string",
     },
+    createdAt: {
+      type: "number",
+      minimum: 0,
+      maximum: Number.MAX_SAFE_INTEGER,
+      multipleOf: 1,
+    },
     updatedAt: {
       type: "number",
       minimum: 0,
@@ -31,7 +37,7 @@ export const checklistSchemaLiteral = {
       multipleOf: 1,
     },
   },
-  required: ["id", "taskId", "userId", "updatedAt"],
+  required: ["id", "taskId", "userId", "createdAt", "updatedAt"],
 } as const;
 
 const schemaTyped = toTypedRxJsonSchema(checklistSchemaLiteral);

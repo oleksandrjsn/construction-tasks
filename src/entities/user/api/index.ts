@@ -43,6 +43,7 @@ export class UserService {
           name,
           id: uuid(),
           updatedAt: Date.now(),
+          createdAt: Date.now(),
         });
       }
 

@@ -21,7 +21,7 @@ export const UserProfile = ({ user, onClick }: UserProfileProps) => {
           {user.name.charAt(0).toUpperCase()}
         </Typography>
       </div>
-      <div className="hidden sm:block">
+      <div className="ml-2 hidden sm:block">
         <Typography variant="body2" color="primary" className="font-medium">
           {user.name}
         </Typography>

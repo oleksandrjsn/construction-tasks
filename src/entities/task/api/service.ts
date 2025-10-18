@@ -51,6 +51,7 @@ export class TaskService {
         ...taskData,
         id: uuidv4(),
         updatedAt: Date.now(),
+        createdAt: Date.now(),
       });
 
       const createdChecklist = await this.checklistRepository.create({
@@ -59,6 +60,7 @@ export class TaskService {
         taskId: createdTask.id,
         userId: taskData.userId,
         updatedAt: Date.now(),
+        createdAt: Date.now(),
       });
 
       const checklistItemsData = this.defaultChecklistItems.map(
@@ -69,6 +71,7 @@ export class TaskService {
           title,
           status: CHECK_LIST_STATUS.NOT_STARTED,
           statusMessage: "",
+          createdAt: Date.now(),
           updatedAt: Date.now(),
           position: index,
         })

@@ -46,6 +46,12 @@ export const checklistItemSchemaLiteral = {
       type: "string",
       description: "Optional message when resolving status",
     },
+    createdAt: {
+      type: "number",
+      minimum: 0,
+      maximum: Number.MAX_SAFE_INTEGER,
+      multipleOf: 1,
+    },
     updatedAt: {
       type: "number",
       minimum: 0,
@@ -59,6 +65,7 @@ export const checklistItemSchemaLiteral = {
     "userId",
     "title",
     "status",
+    "createdAt",
     "updatedAt",
     "position",
   ],
