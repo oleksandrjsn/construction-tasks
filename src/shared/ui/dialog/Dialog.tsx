@@ -79,11 +79,7 @@ export const Dialog = ({
     >
       <div
         ref={dialogRef}
-        className={`
-          relative w-full ${sizeClasses[size]} bg-white rounded-lg shadow-xl
-          transform transition-all duration-200 ease-out
-          ${isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"}
-        `}
+        className={`relative w-full ${sizeClasses[size]} bg-white rounded-lg shadow-xl`}
         onClick={(e) => e.stopPropagation()}
       >
         {(title || showCloseButton) && (

@@ -188,7 +188,7 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
 
       {(isUserMenuOpen || isMobileMenuOpen) && (
         <div
-          className="fixed inset-0 z-40 bg-black bg-opacity-25 md:hidden"
+          className="fixed inset-0 z-2 bg-black bg-opacity-25 md:hidden"
           onClick={() => {
             setIsUserMenuOpen(false);
             setIsMobileMenuOpen(false);
