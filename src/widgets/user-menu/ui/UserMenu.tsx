@@ -39,7 +39,7 @@ export const UserMenu = ({
             key={item.id}
             to={item.href}
             onClick={onClose}
-            className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors"
+            className="block px-4 py-2 text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200"
           >
             {item.label}
           </Link>
@@ -48,7 +48,7 @@ export const UserMenu = ({
         <div className="border-t border-gray-100">
           <button
             onClick={onLogout}
-            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+            className="w-full text-left px-4 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-red-50 transition-all duration-200"
           >
             Logout
           </button>

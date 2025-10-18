@@ -14,7 +14,7 @@ export const UserProfile = ({ user, onClick }: UserProfileProps) => {
   return (
     <button
       onClick={onClick}
-      className="flex items-center space-x-2 p-2 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+      className="flex items-center px-3 py-2 rounded-md text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50 transition-all duration-200"
     >
       <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
         <Typography variant="caption" className="text-white font-medium">

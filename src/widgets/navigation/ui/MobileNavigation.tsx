@@ -20,7 +20,7 @@ export const MobileNavigation = ({
             key={item.id}
             to={item.href}
             onClick={onItemClick}
-            className="block text-gray-600 hover:text-gray-900 px-3 py-2 rounded-md text-base font-medium transition-colors"
+            className="text-gray-700 hover:text-blue-600 hover:bg-blue-50 block px-3 py-2 rounded-md text-base font-medium transition-all duration-200"
           >
             {item.label}
           </Link>
