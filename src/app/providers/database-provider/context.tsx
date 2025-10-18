@@ -1,34 +1,36 @@
-import React, { createContext, useEffect, useState } from "react";
-import type { DbContextValue, DbProviderProps } from "./types";
+import { createContext, useEffect, useState } from "react";
 import { Database, type DatabaseType } from "../../../shared/lib/database";
-import { globalErrorHandler } from "../../../shared/lib/errors/GlobalErrorHandler";
+import type { DbContextValue, DbProviderProps } from "./types";
+import { FullscreenLoader } from "../../../shared/ui";
 
 const DbContext = createContext<DbContextValue>({
   db: null,
   isDbReady: false,
 });
 
-export const DbProvider: React.FC<DbProviderProps> = ({ children }) => {
+export const DbProvider = ({ children }: DbProviderProps) => {
   const [db, setDb] = useState<DatabaseType | null>(null);
   const [isDbReady, setIsDbReady] = useState(false);
+  const [isDbLoading, setIsDbLoading] = useState(true);
 
   useEffect(() => {
     let databaseInstance: DatabaseType | null = null;
 
     const initDb = async () => {
-      return globalErrorHandler.wrapAsync(async () => {
-        try {
-          const database = await Database.getInstance().init();
-          databaseInstance = database;
-          setDb(databaseInstance);
-          setIsDbReady(true);
-        } catch (err) {
-          if (import.meta.env.DEV) {
-            console.debug("Database initialization error:", err);
-          }
-          throw err;
+      setIsDbLoading(true);
+      try {
+        const database = await Database.getInstance().init();
+        databaseInstance = database;
+        setDb(databaseInstance);
+        setIsDbReady(true);
+      } catch (err) {
+        if (import.meta.env.DEV) {
+          console.debug("Database initialization error:", err);
         }
-      });
+        throw err;
+      } finally {
+        setIsDbLoading(false);
+      }
     };
 
     initDb();
@@ -46,6 +48,14 @@ export const DbProvider: React.FC<DbProviderProps> = ({ children }) => {
     db,
     isDbReady,
   };
+
+  if (isDbLoading) {
+    return <FullscreenLoader text="Loading database..." />;
+  }
+
+  if (!isDbLoading && !isDbReady) {
+    throw new Error("Failed to initialize the database");
+  }
 
   return (
     <DbContext.Provider value={contextValue}>{children}</DbContext.Provider>

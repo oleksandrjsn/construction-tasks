@@ -1,14 +1,12 @@
-import React from "react";
-
 export interface IconProps extends React.SVGAttributes<SVGElement> {
   size?: number | string;
 }
 
-export const UserIcon: React.FC<IconProps> = ({
+export const UserIcon = ({
   size = 20,
   className = "",
   ...props
-}) => (
+}: IconProps) => (
   <svg
     width={size}
     height={size}
@@ -26,11 +24,7 @@ export const UserIcon: React.FC<IconProps> = ({
   </svg>
 );
 
-export const EyeIcon: React.FC<IconProps> = ({
-  size = 20,
-  className = "",
-  ...props
-}) => (
+export const EyeIcon = ({ size = 20, className = "", ...props }: IconProps) => (
   <svg
     width={size}
     height={size}
@@ -48,11 +42,11 @@ export const EyeIcon: React.FC<IconProps> = ({
   </svg>
 );
 
-export const EyeOffIcon: React.FC<IconProps> = ({
+export const EyeOffIcon = ({
   size = 20,
   className = "",
   ...props
-}) => (
+}: IconProps) => (
   <svg
     width={size}
     height={size}
@@ -70,11 +64,11 @@ export const EyeOffIcon: React.FC<IconProps> = ({
   </svg>
 );
 
-export const SearchIcon: React.FC<IconProps> = ({
+export const SearchIcon = ({
   size = 20,
   className = "",
   ...props
-}) => (
+}: IconProps) => (
   <svg
     width={size}
     height={size}
@@ -92,11 +86,11 @@ export const SearchIcon: React.FC<IconProps> = ({
   </svg>
 );
 
-export const MailIcon: React.FC<IconProps> = ({
+export const MailIcon = ({
   size = 20,
   className = "",
   ...props
-}) => (
+}: IconProps) => (
   <svg
     width={size}
     height={size}
@@ -114,11 +108,11 @@ export const MailIcon: React.FC<IconProps> = ({
   </svg>
 );
 
-export const LockIcon: React.FC<IconProps> = ({
+export const LockIcon = ({
   size = 20,
   className = "",
   ...props
-}) => (
+}: IconProps) => (
   <svg
     width={size}
     height={size}
@@ -133,5 +127,70 @@ export const LockIcon: React.FC<IconProps> = ({
   >
     <rect width="18" height="11" x="3" y="11" rx="2" ry="2" />
     <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+  </svg>
+);
+
+export const CloseIcon = ({
+  size = 20,
+  className = "",
+  ...props
+}: IconProps) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    {...props}
+  >
+    <line x1="18" y1="6" x2="6" y2="18" />
+    <line x1="6" y1="6" x2="18" y2="18" />
+  </svg>
+);
+
+export const ChevronDownIcon = ({
+  size = 20,
+  className = "",
+  ...props
+}: IconProps) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    {...props}
+  >
+    <polyline points="6,9 12,15 18,9" />
+  </svg>
+);
+
+export const EditIcon = ({
+  size = 20,
+  className = "",
+  ...props
+}: IconProps) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+    {...props}
+  >
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+    <path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z" />
   </svg>
 );

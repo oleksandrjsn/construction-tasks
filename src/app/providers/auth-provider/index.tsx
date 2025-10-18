@@ -39,5 +39,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoggedIn,
   ]);
 
+  if (!isInitialized) {
+    return null;
+  }
+
   return <>{children}</>;
 }

@@ -4,15 +4,15 @@ import {
   type RxConflictHandler,
 } from "rxdb/plugins/core";
 import { getRxStorageLocalstorage } from "rxdb/plugins/storage-localstorage";
+import { checklistSchema } from "./schemas/checklist.schema";
+import { checklistItemSchema } from "./schemas/checklistItem.schema";
+import { taskSchema } from "./schemas/task.schema";
+import { userSchema } from "./schemas/user.schema";
 import type {
   CollectionDocType,
   DatabaseCollections,
   DatabaseType,
 } from "./types";
-import { userSchema } from "./schemas/user.schema";
-import { taskSchema } from "./schemas/task.schema";
-import { checklistSchema } from "./schemas/checklist.schema";
-import { checklistItemSchema } from "./schemas/checklistItem.schema";
 
 export class Database {
   private static instance: Database | null = null;

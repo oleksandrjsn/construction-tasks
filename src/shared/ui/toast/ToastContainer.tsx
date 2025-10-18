@@ -1,7 +1,6 @@
-import React from "react";
 import { useToastStore, type Toast } from "../../lib/toast/useToastStore";
 
-export const ToastContainer: React.FC = () => {
+export const ToastContainer = () => {
   const { toasts, removeToast } = useToastStore();
 
   if (toasts.length === 0) return null;
@@ -24,7 +23,7 @@ interface ToastItemProps {
   onClose: () => void;
 }
 
-const ToastItem: React.FC<ToastItemProps> = ({ toast, onClose }) => {
+const ToastItem = ({ toast, onClose }: ToastItemProps) => {
   const getToastClasses = () => {
     const baseClasses =
       "p-3 rounded-lg min-w-[300px] max-w-[500px] shadow-lg cursor-pointer relative";

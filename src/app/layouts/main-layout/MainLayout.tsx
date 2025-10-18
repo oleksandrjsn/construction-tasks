@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Typography } from "../../../shared/ui";
 import { useAppStore } from "../../store";
 import { useAuth } from "../../../entities/user/model/useAuth";
@@ -7,7 +7,7 @@ export interface MainLayoutProps {
   children: React.ReactNode;
 }
 
-export const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
+export const MainLayout = ({ children }: MainLayoutProps) => {
   const { currentUser, clearState } = useAppStore();
   const { logout } = useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);

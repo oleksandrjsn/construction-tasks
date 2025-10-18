@@ -6,7 +6,9 @@ import type { UserResponse } from "../model/types";
 export class UserSessionAPI {
   private static sessionKey = "userSession";
 
-  static async getSession() {
+  constructor() {}
+
+  async getSession() {
     const userToken = sessionStorage.getItem(UserSessionAPI.sessionKey);
     if (!userToken) {
       return null;
@@ -16,12 +18,12 @@ export class UserSessionAPI {
     return user;
   }
 
-  static async setSession(user: UserResponse) {
+  async setSession(user: UserResponse) {
     const token = JSON.stringify(user);
     sessionStorage.setItem(UserSessionAPI.sessionKey, token);
   }
 
-  static async clearSession() {
+  async clearSession() {
     sessionStorage.removeItem(UserSessionAPI.sessionKey);
   }
 }

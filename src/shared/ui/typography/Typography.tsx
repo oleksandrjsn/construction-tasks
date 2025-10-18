@@ -74,7 +74,7 @@ const alignClasses = {
   right: "text-right",
 };
 
-export const Typography: React.FC<TypographyProps> = ({
+export const Typography = ({
   variant = "body1",
   color = "primary",
   align = "left",
@@ -82,7 +82,7 @@ export const Typography: React.FC<TypographyProps> = ({
   children,
   className = "",
   ...props
-}) => {
+}: TypographyProps) => {
   const Component = component || variantMapping[variant];
 
   const classes = [

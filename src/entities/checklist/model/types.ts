@@ -5,26 +5,25 @@ type ChecklistItemStatus =
   | "final_check"
   | "done";
 
-export interface ChecklistResponse {
+export interface ChecklistModel {
   id: string;
   taskId: string;
   title?: string;
-  items: ChecklistItemResponse[];
 }
 
-export interface ChecklistItemResponse {
+export interface ChecklistItemModel {
   id: string;
   checklistId: string;
   title: string;
   status: ChecklistItemStatus;
   statusMessage?: string;
+  position: number;
 }
 
-export interface AddChecklistRequest {
+export interface CreateChecklistRequest {
   title: string;
   taskId: string;
   userId: string;
-  items?: Omit<AddChecklistItemRequest, "checklistId" | "userId">[];
 }
 
 export interface UpdateChecklistRequest {
@@ -33,10 +32,11 @@ export interface UpdateChecklistRequest {
   title: string;
 }
 
-export interface AddChecklistItemRequest {
+export interface CreateChecklistItemRequest {
   title: string;
   checklistId: string;
   userId: string;
+  position: number;
 }
 
 export interface UpdateChecklistItemRequest {

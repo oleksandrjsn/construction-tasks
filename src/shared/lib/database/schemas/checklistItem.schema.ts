@@ -4,6 +4,14 @@ import {
   type RxJsonSchema,
 } from "rxdb";
 
+export const CHECK_LIST_STATUS = {
+  NOT_STARTED: "not_started",
+  IN_PROGRESS: "in_progress",
+  BLOCKED: "blocked",
+  FINAL_CHECK: "final_check",
+  DONE: "done",
+} as const;
+
 export const checklistItemSchemaLiteral = {
   title: "checklist item schema",
   version: 0,
@@ -24,9 +32,15 @@ export const checklistItemSchemaLiteral = {
     userId: {
       type: "string",
     },
+    position: {
+      type: "number",
+      minimum: 0,
+      maximum: Number.MAX_SAFE_INTEGER,
+      multipleOf: 1,
+    },
     status: {
       type: "string",
-      enum: ["not_started", "in_progress", "blocked", "final_check", "done"],
+      enum: Object.values(CHECK_LIST_STATUS),
     },
     statusMessage: {
       type: "string",
@@ -39,7 +53,15 @@ export const checklistItemSchemaLiteral = {
       multipleOf: 1,
     },
   },
-  required: ["id", "checklistId", "userId", "title", "status", "updatedAt"],
+  required: [
+    "id",
+    "checklistId",
+    "userId",
+    "title",
+    "status",
+    "updatedAt",
+    "position",
+  ],
 } as const;
 
 const schemaTyped = toTypedRxJsonSchema(checklistItemSchemaLiteral);

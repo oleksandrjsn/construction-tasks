@@ -1,17 +1,19 @@
-import { ToastContainer } from "../../shared/ui/toast";
+import { ErrorBoundary } from "react-error-boundary";
+import { ErrorFallback } from "../../shared/ui";
 import { AuthProvider } from "./auth-provider";
 import { DbProvider } from "./database-provider";
-import { ErrorProvider } from "./error-provider";
+import { ToastProvider } from "./toast-provider";
 
 export const withProviders = (Component: React.ComponentType) => {
   return () => (
-    <ErrorProvider>
+    <ErrorBoundary FallbackComponent={ErrorFallback}>
       <DbProvider>
-        <AuthProvider>
-          <Component />
-          <ToastContainer />
-        </AuthProvider>
+        <ToastProvider>
+          <AuthProvider>
+            <Component />
+          </AuthProvider>
+        </ToastProvider>
       </DbProvider>
-    </ErrorProvider>
+    </ErrorBoundary>
   );
 };

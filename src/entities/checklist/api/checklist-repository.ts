@@ -1,3 +1,4 @@
+import { map } from "rxjs";
 import type { DatabaseType } from "../../../shared/lib/database";
 import type { ChecklistDocType } from "../../../shared/lib/database/schemas";
 
@@ -65,16 +66,11 @@ export class ChecklistRepository {
     return true;
   }
 
-  async checkExists(taskId: string, userId: string): Promise<boolean> {
-    const checklist = await this.db.checklists
-      .findOne({
-        selector: {
-          taskId,
-          userId,
-        },
+  subscribeToUserChecklists(userId: string, taskId: string) {
+    return this.db.checklists.find({ selector: { userId, taskId } }).$.pipe(
+      map((checklists) => {
+        return checklists.map((checklist) => checklist.toJSON());
       })
-      .exec();
-
-    return !!checklist;
+    );
   }
 }

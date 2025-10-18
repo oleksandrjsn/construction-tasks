@@ -3,6 +3,7 @@ import { Button, Input, UserIcon } from "../../../shared/ui";
 import { AuthLayout } from "../../../app/layouts";
 import { useAuth } from "../../../entities/user/model/useAuth";
 import { useAppStore } from "../../../app/store";
+import { globalErrorHandler } from "../../../shared/lib/errors/GlobalErrorHandler";
 
 export function LoginPage() {
   const [username, setUsername] = useState("");
@@ -22,8 +23,17 @@ export function LoginPage() {
 
     try {
       const user = await login(username);
+
+      if (!user) {
+        throw new Error("Login failed");
+      }
+
       setCurrentUser(user);
       setIsLoggedIn(true);
+    } catch (error) {
+      globalErrorHandler.handleError(error);
+      setCurrentUser(null);
+      setIsLoggedIn(false);
     } finally {
       setIsLoading(false);
     }

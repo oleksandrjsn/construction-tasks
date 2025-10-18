@@ -1,2 +1,2 @@
-export { TaskRepository } from "./api/repository";
-export { TaskService } from "./api";
+export * from "./api";
+export * from "./model";

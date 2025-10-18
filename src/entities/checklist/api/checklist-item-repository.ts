@@ -1,3 +1,4 @@
+import { map } from "rxjs";
 import type { DatabaseType } from "../../../shared/lib/database";
 import type { ChecklistItemDocType } from "../../../shared/lib/database/schemas";
 
@@ -90,7 +91,13 @@ export class ChecklistItemRepository {
     return true;
   }
 
-  async deleteByChecklistId(checklistId: string): Promise<void> {
-    await this.db.checklistItems.find({ selector: { checklistId } }).remove();
+  subscribeToUserChecklists(userId: string, checklistId: string) {
+    return this.db.checklistItems
+      .find({ selector: { userId, checklistId } })
+      .$.pipe(
+        map((checklistItems) => {
+          return checklistItems.map((item) => item.toJSON());
+        })
+      );
   }
 }

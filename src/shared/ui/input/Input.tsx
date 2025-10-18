@@ -33,6 +33,11 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   ) => {
     const hasError = !!error;
 
+    const inputId =
+      props.id || label
+        ? `input-${label?.toLowerCase().replace(/\s+/g, "-")}`
+        : undefined;
+
     const containerClasses = [fullWidth ? "w-full" : "w-auto"].join(" ");
 
     const inputWrapperClasses = [
@@ -125,7 +130,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className={containerClasses}>
         {label && (
-          <label className="block text-sm font-medium text-gray-700 mb-1">
+          <label
+            className="block text-sm font-medium text-gray-700 mb-1"
+            htmlFor={inputId}
+          >
             {label}
           </label>
         )}
@@ -142,6 +150,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             className={inputClasses}
             disabled={disabled}
             {...props}
+            id={inputId}
           />
 
           {rightIcon && (
