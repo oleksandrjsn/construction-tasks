@@ -124,11 +124,14 @@ export class ChecklistService {
   };
 
   subscribeToUserChecklists = (userId: string, taskId: string) => {
-    return this.checklistRepository.subscribeToUserChecklists(userId, taskId);
+    return this.checklistRepository.subscribeToUserChecklistsByTask(
+      userId,
+      taskId
+    );
   };
 
   subscribeToChecklistItems = (userId: string, checklistId: string) => {
-    return this.checklistItemRepository.subscribeToUserChecklists(
+    return this.checklistItemRepository.subscribeToUserChecklistItems(
       userId,
       checklistId
     );

@@ -1,12 +1,21 @@
 import { v4 as uuidv4 } from "uuid";
 import { globalErrorHandler } from "../../../shared/lib/errors/GlobalErrorHandler";
-import type { CreateTaskRequest, UpdateTaskRequest } from "../model/types";
+import type {
+  CreateTaskRequest,
+  TaskComputedStatus,
+  UpdateTaskRequest,
+} from "../model/types";
 import type { TaskRepository } from "./repository";
 import type {
   ChecklistItemRepository,
   ChecklistRepository,
 } from "../../checklist";
-import { CHECK_LIST_STATUS } from "../../../shared/lib/database/schemas";
+import {
+  CHECK_LIST_STATUS,
+  type ChecklistDocType,
+  type ChecklistItemDocType,
+} from "../../../shared/lib/database/schemas";
+import { combineLatest, switchMap } from "rxjs";
 
 export class TaskService {
   private taskRepository: TaskRepository;
@@ -31,7 +40,24 @@ export class TaskService {
 
   getUserTasks = async (userId: string) => {
     try {
-      return await this.taskRepository.getAll(userId);
+      const tasks = await this.taskRepository.getAll(userId);
+      const checklists = await this.checklistRepository.findByUserIdAndTaskId(
+        userId,
+        ""
+      );
+      const checklistItems =
+        await this.checklistItemRepository.findByChecklistId("");
+
+      return Promise.all(
+        tasks.map(async (task) => {
+          const status = await this.getComputedStatus(
+            task.id,
+            checklists ? [checklists] : [],
+            checklistItems
+          );
+          return { ...task, status };
+        })
+      );
     } catch (error) {
       return globalErrorHandler.handleError(error);
     }
@@ -39,7 +65,33 @@ export class TaskService {
 
   getTaskDetails = async (userId: string, taskId: string) => {
     try {
-      return await this.taskRepository.getOne(userId, taskId);
+      const task = await this.taskRepository.getOne(userId, taskId);
+      if (!task) {
+        throw new Error("Task not found");
+      }
+
+      const checklist = await this.checklistRepository.findByUserIdAndTaskId(
+        userId,
+        taskId
+      );
+      let checklistItems: ChecklistItemDocType[] = [];
+      if (checklist) {
+        checklistItems = await this.checklistItemRepository.findByChecklistId(
+          checklist.id
+        );
+      }
+
+      const status = await this.getComputedStatus(
+        task.id,
+        checklist ? [checklist] : [],
+        checklistItems
+      );
+
+      return {
+        ...task,
+        status,
+        checklist: { ...checklist, items: checklistItems },
+      };
     } catch (error) {
       return globalErrorHandler.handleError(error);
     }
@@ -106,6 +158,60 @@ export class TaskService {
   };
 
   subscribeToUserTasks = (userId: string) => {
-    return this.taskRepository.subscribeToUserTasks(userId);
+    const tasks$ = this.taskRepository.subscribeToUserTasks(userId);
+    const checklists$ =
+      this.checklistRepository.subscribeToUserChecklists(userId);
+    const checklistItems$ =
+      this.checklistItemRepository.subscribeToAllUserChecklistItems(userId);
+
+    return combineLatest([tasks$, checklists$, checklistItems$]).pipe(
+      switchMap(async ([tasks, checklists, checklistItems]) => {
+        return Promise.all(
+          tasks.map(async (task) => {
+            const status = await this.getComputedStatus(
+              task.id,
+              checklists,
+              checklistItems
+            );
+            return { ...task, status };
+          })
+        );
+      })
+    );
+  };
+
+  private getComputedStatus = async (
+    taskId: string,
+    checklists: ChecklistDocType[],
+    checklistItems: ChecklistItemDocType[]
+  ): Promise<TaskComputedStatus> => {
+    const checkList = checklists.find((cl) => cl.taskId === taskId);
+    const checklistItemsForTask = checklistItems.filter(
+      (item) => checkList && item.checklistId === checkList.id
+    );
+    if (
+      checklistItemsForTask.length === 0 ||
+      checklistItemsForTask.every((item) => item.status === "not_started")
+    ) {
+      return "not_started";
+    }
+
+    const allDone = checklistItemsForTask.every(
+      (item) => item.status === "done"
+    );
+
+    if (allDone) {
+      return "completed";
+    }
+
+    const anyBlocked = checklistItemsForTask.some(
+      (item) => item.status === "blocked"
+    );
+
+    if (anyBlocked) {
+      return "blocked";
+    }
+
+    return "in_progress";
   };
 }

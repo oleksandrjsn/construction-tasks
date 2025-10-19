@@ -1,17 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { TaskModel } from ".";
-import { useDb } from "../../../app/providers/database-provider";
-import { createTaskService } from "../api";
+import { useTaskService } from "../api/useTaskService";
 
 export const useTasks = (userId?: string) => {
   const [tasks, setTasks] = useState<TaskModel[]>([]);
-  const { db, isDbReady } = useDb();
-
-  if (!isDbReady || !db) {
-    throw new Error("Database is not ready");
-  }
-
-  const taskService = useMemo(() => createTaskService(db), [db]);
+  const taskService = useTaskService();
 
   useEffect(() => {
     if (!taskService || !userId) {

@@ -66,8 +66,16 @@ export class ChecklistRepository {
     return true;
   }
 
-  subscribeToUserChecklists(userId: string, taskId: string) {
+  subscribeToUserChecklistsByTask(userId: string, taskId: string) {
     return this.db.checklists.find({ selector: { userId, taskId } }).$.pipe(
+      map((checklists) => {
+        return checklists.map((checklist) => checklist.toJSON());
+      })
+    );
+  }
+
+  subscribeToUserChecklists(userId: string) {
+    return this.db.checklists.find({ selector: { userId } }).$.pipe(
       map((checklists) => {
         return checklists.map((checklist) => checklist.toJSON());
       })

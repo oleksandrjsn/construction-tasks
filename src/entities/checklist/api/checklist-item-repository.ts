@@ -91,7 +91,7 @@ export class ChecklistItemRepository {
     return true;
   }
 
-  subscribeToUserChecklists(userId: string, checklistId: string) {
+  subscribeToUserChecklistItems(userId: string, checklistId: string) {
     return this.db.checklistItems
       .find({ selector: { userId, checklistId } })
       .$.pipe(
@@ -99,5 +99,13 @@ export class ChecklistItemRepository {
           return checklistItems.map((item) => item.toJSON());
         })
       );
+  }
+
+  subscribeToAllUserChecklistItems(userId: string) {
+    return this.db.checklistItems.find({ selector: { userId } }).$.pipe(
+      map((checklistItems) => {
+        return checklistItems.map((item) => item.toJSON());
+      })
+    );
   }
 }

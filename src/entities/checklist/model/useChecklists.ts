@@ -1,17 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import type { ChecklistModel } from "./types";
-import { useDb } from "../../../app/providers/database-provider";
-import { createChecklistService } from "../api";
+import { useChecklistService } from "../api/useChecklistService";
 
 export const useChecklists = (userId?: string, taskId?: string) => {
   const [checklists, setChecklists] = useState<ChecklistModel[]>([]);
-  const { db, isDbReady } = useDb();
-
-  if (!isDbReady || !db) {
-    throw new Error("Database is not ready");
-  }
-
-  const checklistService = useMemo(() => createChecklistService(db), [db]);
+  const checklistService = useChecklistService();
 
   useEffect(() => {
     if (!checklistService || !userId || !taskId) {

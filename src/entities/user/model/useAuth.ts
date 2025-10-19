@@ -1,13 +1,28 @@
-import { useMemo } from "react";
-import { useDb } from "../../../app/providers/database-provider";
-import { createUserService } from "../api/factory";
+import { useAppStore } from "../../../app/store";
+import { useUserService } from "../api/useUserService";
 
 export const useAuth = () => {
-  const { db, isDbReady } = useDb();
+  const { currentUser, clearState, isLoggedIn, setCurrentUser } = useAppStore();
+  const userService = useUserService();
 
-  if (!isDbReady || !db) {
-    throw new Error("Database is not ready");
-  }
+  const login = async (name: string) => {
+    const user = await userService.login(name);
+    if (user) {
+      setCurrentUser(user);
+    }
+    return user;
+  };
 
-  return useMemo(() => createUserService(db), [db]);
+  const logout = async () => {
+    await userService.logout();
+    clearState();
+  };
+
+  return {
+    user: currentUser,
+    isLoggedIn,
+    login,
+    logout,
+    getProfile: userService.getProfile,
+  };
 };
