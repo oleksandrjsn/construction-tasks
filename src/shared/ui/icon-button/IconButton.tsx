@@ -1,13 +1,10 @@
 import { ButtonLoader } from "../loader";
 
-export interface ButtonProps
+export interface IconButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary" | "outline" | "ghost" | "danger";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
-  fullWidth?: boolean;
 }
 
 const baseClasses = [
@@ -56,30 +53,24 @@ const variantClasses = {
 };
 
 const sizeClasses = {
-  sm: ["text-sm", "px-3", "py-1.5", "gap-1.5"],
-  md: ["text-sm", "px-4", "py-2", "gap-2"],
-  lg: ["text-base", "px-6", "py-3", "gap-2"],
+  sm: ["text-sm", "p-1.5"],
+  md: ["text-sm", "p-2"],
+  lg: ["text-base", "p-3"],
 };
 
-export const Button = ({
+export const IconButton = ({
   children,
   variant = "primary",
   size = "md",
   isLoading = false,
-  leftIcon,
-  rightIcon,
-  fullWidth = false,
   className = "",
   disabled,
   ...props
-}: ButtonProps) => {
-  const widthClasses = fullWidth ? ["w-full"] : [];
-
+}: IconButtonProps) => {
   const allClasses = [
     ...baseClasses,
     ...variantClasses[variant],
     ...sizeClasses[size],
-    ...widthClasses,
     className,
   ].join(" ");
 
@@ -87,15 +78,7 @@ export const Button = ({
 
   return (
     <button className={allClasses} disabled={isDisabled} {...props}>
-      {isLoading ? (
-        <ButtonLoader />
-      ) : (
-        <>
-          {leftIcon && <span className="flex-shrink-0">{leftIcon}</span>}
-          {children}
-          {rightIcon && <span className="flex-shrink-0">{rightIcon}</span>}
-        </>
-      )}
+      {isLoading ? <ButtonLoader /> : <>{children}</>}
     </button>
   );
 };

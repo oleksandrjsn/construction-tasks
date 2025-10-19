@@ -74,16 +74,6 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
         />
       </header>
 
-      {(isUserMenuOpen || isMobileMenuOpen) && (
-        <div
-          className="fixed inset-0 z-2 bg-black bg-opacity-25 md:hidden"
-          onClick={() => {
-            setIsUserMenuOpen(false);
-            setIsMobileMenuOpen(false);
-          }}
-        />
-      )}
-
       <main className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
         {children}
       </main>

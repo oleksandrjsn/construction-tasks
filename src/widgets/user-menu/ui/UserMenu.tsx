@@ -1,6 +1,4 @@
-import { Link } from "react-router-dom";
 import { Typography } from "../../../shared/ui";
-import { USER_MENU_ITEMS } from "../../../shared/config/navigation";
 
 interface User {
   id: string;
@@ -14,12 +12,7 @@ interface UserMenuProps {
   onLogout: () => void;
 }
 
-export const UserMenu = ({
-  user,
-  isOpen,
-  onClose,
-  onLogout,
-}: UserMenuProps) => {
+export const UserMenu = ({ user, isOpen, onLogout }: UserMenuProps) => {
   if (!isOpen) return null;
 
   return (
@@ -29,21 +22,7 @@ export const UserMenu = ({
           <Typography variant="body2" color="primary" className="font-medium">
             {user.name}
           </Typography>
-          <Typography variant="caption" color="muted">
-            ID: {user.id}
-          </Typography>
         </div>
-
-        {USER_MENU_ITEMS.map((item) => (
-          <Link
-            key={item.id}
-            to={item.href}
-            onClick={onClose}
-            className="block px-4 py-2 text-sm text-gray-700 hover:text-blue-600 hover:bg-blue-50 rounded-md transition-all duration-200"
-          >
-            {item.label}
-          </Link>
-        ))}
 
         <div className="border-t border-gray-100">
           <button

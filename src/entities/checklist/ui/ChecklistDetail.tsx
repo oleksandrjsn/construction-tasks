@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Typography, Button, Input } from "../../../shared/ui";
+import { Typography, Button, Input, IconButton } from "../../../shared/ui";
 import { EditIcon } from "../../../shared/ui/icons/Icons";
 import { useChecklistItems } from "../model/useChecklistitems";
 import { useChecklists } from "../model/useChecklists";
@@ -187,14 +187,14 @@ export const ChecklistDetail = ({
             <Typography variant="h6" className="font-semibold">
               {title || "Checklist Detail"}
             </Typography>
-            <Button
+            <IconButton
               variant="ghost"
               size="sm"
               onClick={handleEditTitle}
               className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
             >
               <EditIcon size={16} />
-            </Button>
+            </IconButton>
             <Typography variant="body2" color="muted" className="capitalize">
               ({clLength} steps)
             </Typography>

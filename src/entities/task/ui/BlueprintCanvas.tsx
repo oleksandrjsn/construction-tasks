@@ -42,9 +42,11 @@ export const BlueprintCanvas = () => {
   const { currentUser } = useAppStore((state) => state);
   const [isLoading, setIsLoading] = useState(false);
   const [isFormTouched, setIsFormTouched] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
+  const [isModifyingTask, setIsModifyingTask] = useState(false);
 
-  const { tasks, createTask, deleteTask } = useTasks(currentUser?.id);
+  const { tasks, createTask, updateTask, deleteTask } = useTasks(
+    currentUser?.id
+  );
 
   const taskMarkers = tasks.map(
     (task): TaskMarkerProps => ({
@@ -88,14 +90,14 @@ export const BlueprintCanvas = () => {
     const userId = currentUser?.id;
     const taskId = taskDialogState.taskId;
     if (!userId || !taskId) return;
-    setIsDeleting(true);
+    setIsModifyingTask(true);
     try {
       await deleteTask(userId, taskId);
       handleCloseTaskDialog();
     } catch (error) {
       globalErrorHandler.handleError(error);
     } finally {
-      setIsDeleting(false);
+      setIsModifyingTask(false);
     }
   };
 
@@ -107,7 +109,8 @@ export const BlueprintCanvas = () => {
     setTaskDialogState(defaultTaskDialogState);
   };
 
-  const handleCreateTask = async () => {
+  const handleCreateTask = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setIsFormTouched(true);
 
     if (!newTaskDialogState.title.trim()) {
@@ -133,6 +136,25 @@ export const BlueprintCanvas = () => {
       globalErrorHandler.handleError(error);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleUpdateTask = async (taskId: string, title: string) => {
+    const userId = currentUser?.id;
+    if (!userId) return;
+
+    setIsModifyingTask(true);
+
+    try {
+      await updateTask({
+        userId,
+        id: taskId,
+        title: title,
+      });
+    } catch (error) {
+      globalErrorHandler.handleError(error);
+    } finally {
+      setIsModifyingTask(false);
     }
   };
 
@@ -197,7 +219,8 @@ export const BlueprintCanvas = () => {
           isOpen={taskDialogState.isOpen}
           onClose={handleCloseTaskDialog}
           onDelete={handleDeleteTask}
-          isDeleting={isDeleting}
+          onEdit={handleUpdateTask}
+          isLoading={isModifyingTask}
           taskId={selectedTask.id}
           title={selectedTask.title}
           status={selectedTask.status}

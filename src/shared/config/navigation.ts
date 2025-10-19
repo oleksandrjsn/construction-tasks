@@ -19,16 +19,3 @@ export const MAIN_NAVIGATION: NavigationItem[] = [
     href: "/blueprint",
   },
 ];
-
-export const USER_MENU_ITEMS: NavigationItem[] = [
-  {
-    id: "profile",
-    label: "Profile Settings",
-    href: "/profile",
-  },
-  {
-    id: "preferences",
-    label: "Preferences",
-    href: "/preferences",
-  },
-];

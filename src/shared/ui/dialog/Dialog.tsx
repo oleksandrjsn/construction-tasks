@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import { CloseIcon } from "../icons";
-import { Button } from "../button";
+import { IconButton } from "../icon-button";
+import { Overlay } from "../overlay/Overlay";
 
 export interface DialogProps {
   isOpen: boolean;
@@ -73,10 +74,7 @@ export const Dialog = ({
   };
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/20 backdrop-blur-sm"
-      onClick={handleOverlayClick}
-    >
+    <Overlay onClick={handleOverlayClick}>
       <div
         ref={dialogRef}
         className={`relative w-full ${sizeClasses[size]} bg-white rounded-lg shadow-xl`}
@@ -88,20 +86,20 @@ export const Dialog = ({
               <h2 className="text-lg font-semibold text-gray-900">{title}</h2>
             )}
             {showCloseButton && (
-              <Button
+              <IconButton
                 variant="ghost"
                 size="sm"
                 onClick={onClose}
-                className="p-1 ml-auto"
+                className="ml-auto"
                 aria-label="Close dialog"
               >
                 <CloseIcon className="w-5 h-5" />
-              </Button>
+              </IconButton>
             )}
           </div>
         )}
         <div className={slotProps?.contentClassName || "p-6"}>{children}</div>
       </div>
-    </div>
+    </Overlay>
   );
 };

@@ -4,6 +4,7 @@ export * from "./button";
 export * from "./chip";
 export * from "./input";
 export * from "./icons";
+export * from "./icon-button";
 export * from "./loader";
 export * from "./toast";
 export * from "./error-boundry";

@@ -12,7 +12,7 @@ export function LoginPage() {
   const { login } = useAuth();
   const { setCurrentUser, setIsLoggedIn } = useAppStore();
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     if (!username.trim()) {

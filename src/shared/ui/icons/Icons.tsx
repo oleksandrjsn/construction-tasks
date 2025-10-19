@@ -194,3 +194,24 @@ export const EditIcon = ({
     <path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z" />
   </svg>
 );
+
+export const CheckIcon = ({
+  size = 20,
+  className = "",
+  ...props
+}: IconProps) => (
+  <svg
+    width={size}
+    height={size}
+    className={className}
+    fill="currentColor"
+    viewBox="0 0 20 20"
+    {...props}
+  >
+    <path
+      fillRule="evenodd"
+      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+      clipRule="evenodd"
+    />
+  </svg>
+);

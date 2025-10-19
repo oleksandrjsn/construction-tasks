@@ -1,4 +1,14 @@
-import { Button, Dialog, Loader, Typography } from "../../../shared/ui";
+import { useState } from "react";
+import {
+  Button,
+  CheckIcon,
+  Dialog,
+  EditIcon,
+  IconButton,
+  Input,
+  Loader,
+  Typography,
+} from "../../../shared/ui";
 import { Checklists } from "../../checklist/ui/Checklists";
 import type { TaskComputedStatus } from "../model/types";
 
@@ -9,7 +19,8 @@ interface TaskDialogProps {
   title: string;
   status: TaskComputedStatus;
   onDelete?: (taskId: string) => void;
-  isDeleting?: boolean;
+  onEdit?: (taskId: string, taskName: string) => void;
+  isLoading?: boolean;
 }
 
 const getStatusConfig = (status: TaskComputedStatus) => {
@@ -54,13 +65,37 @@ export const TaskDialog = ({
   title,
   status,
   onDelete,
-  isDeleting,
+  onEdit,
+  isLoading,
 }: TaskDialogProps) => {
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [editedTitle, setEditedTitle] = useState(title);
   const statusConfig = getStatusConfig(status);
 
   const handleDelete = () => {
     if (onDelete) {
       onDelete(taskId);
+    }
+  };
+
+  const handleEditTitle = () => {
+    setIsEditingTitle(true);
+  };
+
+  const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditedTitle(e.target.value);
+  };
+
+  const handleCancelEdit = () => {
+    setIsEditingTitle(false);
+    setEditedTitle(title);
+  };
+
+  const handleSubmitTitle = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (onEdit) {
+      onEdit(taskId, editedTitle);
+      setIsEditingTitle(false);
     }
   };
 
@@ -78,9 +113,48 @@ export const TaskDialog = ({
         {/* Header with title and status */}
         <div className="flex items-center gap-2 px-4 py-2">
           <div className="flex-1">
-            <Typography variant="h3" className="capitalize" component="h2">
-              {title}
-            </Typography>
+            {isEditingTitle ? (
+              <form
+                className="flex gap-1 items-center"
+                onSubmit={handleSubmitTitle}
+              >
+                <Input value={editedTitle} onChange={handleTitleChange} />
+                <IconButton
+                  type="submit"
+                  size="sm"
+                  variant="primary"
+                  disabled={!editedTitle.trim()}
+                  title="Save"
+                >
+                  <CheckIcon size={16} />
+                </IconButton>
+                <IconButton
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  onClick={handleCancelEdit}
+                  title="Cancel"
+                >
+                  Cancel
+                </IconButton>
+              </form>
+            ) : (
+              <div className="flex gap-1">
+                <Typography variant="h3" className="capitalize" component="h2">
+                  {title}
+                </Typography>
+                {onEdit && (
+                  <IconButton
+                    variant="ghost"
+                    size="sm"
+                    onClick={handleEditTitle}
+                    className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                  >
+                    <EditIcon size={16} />
+                  </IconButton>
+                )}
+              </div>
+            )}
           </div>
           <div className="flex items-center">
             <div
@@ -90,8 +164,8 @@ export const TaskDialog = ({
               {statusConfig.text}
             </span>
           </div>
-          <Button variant="danger" disabled={isDeleting} onClick={handleDelete}>
-            {isDeleting ? <Loader size="sm" /> : "Delete"}
+          <Button variant="danger" disabled={isLoading} onClick={handleDelete}>
+            {isLoading ? <Loader size="sm" /> : "Delete"}
           </Button>
         </div>
 
@@ -102,7 +176,7 @@ export const TaskDialog = ({
 
         {/* Footer with close button */}
         <div className="flex justify-end pt-3 px-4 pb-1">
-          <Button onClick={onClose} disabled={isDeleting}>
+          <Button onClick={onClose} disabled={isLoading}>
             Close
           </Button>
         </div>
