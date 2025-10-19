@@ -74,7 +74,7 @@ export const TaskDialog = ({
   const [editedTitle, setEditedTitle] = useState(title);
   const statusConfig = getStatusConfig(status);
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (onDelete) {
       onDelete(taskId);
     }
@@ -171,6 +171,14 @@ export const TaskDialog = ({
             disabled={isLoading}
             onConfirm={handleDelete}
             isLoading={isLoading}
+            confirmationConfig={{
+              title: "Delete task?",
+              message:
+                "Are you sure you want to delete this task? This action cannot be undone.",
+              confirmText: "Delete",
+              cancelText: "Cancel",
+              confirmVariant: "danger",
+            }}
           >
             Delete
           </ButtonWithConfirmation>

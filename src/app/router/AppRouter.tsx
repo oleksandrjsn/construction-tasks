@@ -18,7 +18,7 @@ function AppRoutes() {
 
   const shouldNavigateToLogin =
     !isAuthenticated && !AUTH_ROUTES.includes(location.pathname);
-  const shouldNavigateToBlueprint =
+  const shouldNavigateToHome =
     (isAuthenticated && AUTH_ROUTES.includes(location.pathname)) ||
     location.pathname === "/";
 
@@ -36,7 +36,7 @@ function AppRoutes() {
         />
       </Routes>
       {shouldNavigateToLogin && <Navigate to="/login" replace />}
-      {shouldNavigateToBlueprint && <Navigate to="/blueprint" replace />}
+      {shouldNavigateToHome && <Navigate to="/dashboard" replace />}
     </>
   );
 }
