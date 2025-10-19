@@ -1,9 +1,15 @@
 import { useState } from "react";
-import { Typography, Button, Input, IconButton } from "../../../shared/ui";
-import { EditIcon } from "../../../shared/ui/icons/Icons";
+import {
+  Button,
+  IconButton,
+  Input,
+  Typography,
+  withConfirmation,
+} from "../../../shared/ui";
+import { DeleteIcon, EditIcon } from "../../../shared/ui/icons/Icons";
+import type { ChecklistItemModel } from "../model/types";
 import { useChecklistItems } from "../model/useChecklistitems";
 import { useChecklists } from "../model/useChecklists";
-import type { ChecklistItemModel } from "../model/types";
 import { StatusChangeDialog, StatusIcon } from "./StatusChangeDialog";
 
 interface ChecklistDetailProps {
@@ -19,6 +25,8 @@ interface StatusDialogState {
   currentStatus: ChecklistItemModel["status"] | null;
   currentMessage: string;
 }
+
+const ButtonWithConfirmation = withConfirmation(IconButton);
 
 export const ChecklistDetail = ({
   checkListId,
@@ -239,14 +247,22 @@ export const ChecklistDetail = ({
                 )}
               </div>
 
-              <Button
-                variant="ghost"
+              <ButtonWithConfirmation
                 size="sm"
-                onClick={() => handleDeleteItem(item.id)}
-                className="text-gray-400 hover:text-rose-500 transition-colors duration-200 opacity-0 group-hover:opacity-100"
+                title="Delete Task"
+                variant="danger"
+                onConfirm={() => handleDeleteItem(item.id)}
+                confirmationConfig={{
+                  title: "Delete Checklist Item?",
+                  message:
+                    "Are you sure you want to delete this checklist item? This action cannot be undone.",
+                  confirmText: "Delete",
+                  cancelText: "Cancel",
+                  confirmVariant: "danger",
+                }}
               >
-                ×
-              </Button>
+                <DeleteIcon size="14px" />
+              </ButtonWithConfirmation>
             </li>
           ))}
       </ul>

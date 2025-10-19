@@ -84,9 +84,8 @@ export const BlueprintCanvas = () => {
     });
   };
 
-  const handleDeleteTask = async () => {
+  const handleDeleteTask = async (taskId: string) => {
     const userId = user?.id;
-    const taskId = taskDialogState.taskId;
     if (!userId || !taskId) return;
     setIsModifyingTask(true);
     try {

@@ -6,8 +6,8 @@ import {
   EditIcon,
   IconButton,
   Input,
-  Loader,
   Typography,
+  withConfirmation,
 } from "../../../shared/ui";
 import { Checklists } from "../../checklist/ui/Checklists";
 import type { TaskComputedStatus } from "../model/types";
@@ -57,6 +57,8 @@ const getStatusConfig = (status: TaskComputedStatus) => {
       };
   }
 };
+
+const ButtonWithConfirmation = withConfirmation(Button);
 
 export const TaskDialog = ({
   isOpen,
@@ -164,9 +166,14 @@ export const TaskDialog = ({
               {statusConfig.text}
             </span>
           </div>
-          <Button variant="danger" disabled={isLoading} onClick={handleDelete}>
-            {isLoading ? <Loader size="sm" /> : "Delete"}
-          </Button>
+          <ButtonWithConfirmation
+            variant="danger"
+            disabled={isLoading}
+            onConfirm={handleDelete}
+            isLoading={isLoading}
+          >
+            Delete
+          </ButtonWithConfirmation>
         </div>
 
         {/* Content area - placeholder for checklist */}

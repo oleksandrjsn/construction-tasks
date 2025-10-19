@@ -1,8 +1,17 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { MainLayout } from "../../../app/layouts";
 import { useTasks } from "../../../entities/task";
-import { Chip, IconButton, Typography } from "../../../shared/ui";
+import {
+  Chip,
+  DeleteIcon,
+  EyeIcon,
+  IconButton,
+  Typography,
+  withConfirmation,
+} from "../../../shared/ui";
 import { useAuth } from "../../../app/providers/auth-provider";
+import { TaskDialog } from "../../../entities/task/ui";
+import { globalErrorHandler } from "../../../shared/lib/errors";
 
 type ChipVariant = "default" | "primary" | "success" | "warning" | "error";
 
@@ -25,15 +34,34 @@ const getStatusChipVariant = (status: string): ChipVariant => {
   }
 };
 
+interface TaskDialogState {
+  isOpen: boolean;
+  taskId: string | null;
+}
+
+const defaultTaskDialogState: TaskDialogState = {
+  isOpen: false,
+  taskId: null,
+};
+
 // Helper function to format status text for display
 const formatStatusText = (status: string): string => {
   return status.replace("_", " ").toUpperCase();
 };
 
+const IconButtonWithConfirmation = withConfirmation(IconButton);
+
 export function DashboardPage() {
   const { user } = useAuth();
 
-  const { tasks } = useTasks(user?.id);
+  const { tasks, deleteTask, updateTask } = useTasks(user?.id);
+
+  const [taskDialogState, setTaskDialogState] = useState<TaskDialogState>(
+    defaultTaskDialogState
+  );
+  const [isModifyingTask, setIsModifyingTask] = useState(false);
+
+  const selectedTask = tasks.find((task) => task.id === taskDialogState.taskId);
 
   const metrics = useMemo(() => {
     return tasks.reduce(
@@ -52,6 +80,47 @@ export function DashboardPage() {
       { completed: 0, active: 0, notStarted: 0, blocked: 0 }
     );
   }, [tasks]);
+
+  const handleTaskDetailClick = (taskId: string) => {
+    setTaskDialogState({ isOpen: true, taskId });
+  };
+
+  const handleCloseTaskDialog = () => {
+    setTaskDialogState(defaultTaskDialogState);
+  };
+
+  const handleUpdateTask = async (taskId: string, title: string) => {
+    const userId = user?.id;
+    if (!userId) return;
+
+    setIsModifyingTask(true);
+
+    try {
+      await updateTask({
+        userId,
+        id: taskId,
+        title: title,
+      });
+    } catch (error) {
+      throw globalErrorHandler.handleError(error);
+    } finally {
+      setIsModifyingTask(false);
+    }
+  };
+
+  const handleDeleteTask = async (taskId: string) => {
+    const userId = user?.id;
+    if (!userId || !taskId) return;
+    setIsModifyingTask(true);
+    try {
+      await deleteTask(userId, taskId);
+      handleCloseTaskDialog();
+    } catch (error) {
+      throw globalErrorHandler.handleError(error);
+    } finally {
+      setIsModifyingTask(false);
+    }
+  };
 
   const recentTasks = useMemo(() => {
     return tasks
@@ -137,16 +206,50 @@ export function DashboardPage() {
                       Last updated: {new Date(task.updatedAt).toLocaleString()}
                     </Typography>
                   </div>
-                  <IconButton></IconButton>
+                  <IconButton
+                    size="sm"
+                    title="View Task"
+                    onClick={() => handleTaskDetailClick(task.id)}
+                  >
+                    <EyeIcon size="14px" />
+                  </IconButton>
                   <Chip variant={getStatusChipVariant(task.status)}>
                     {formatStatusText(task.status)}
                   </Chip>
+                  <IconButtonWithConfirmation
+                    size="sm"
+                    title="Delete Task"
+                    variant="danger"
+                    onConfirm={() => handleDeleteTask(task.id)}
+                    confirmationConfig={{
+                      title: "Delete task?",
+                      message:
+                        "Are you sure you want to delete this task? This action cannot be undone.",
+                      confirmText: "Delete",
+                      cancelText: "Cancel",
+                      confirmVariant: "danger",
+                    }}
+                  >
+                    <DeleteIcon size="14px" />
+                  </IconButtonWithConfirmation>
                 </div>
               ))}
             </div>
           </div>
         </div>
       </div>
+      {selectedTask && (
+        <TaskDialog
+          isOpen={taskDialogState.isOpen}
+          onClose={handleCloseTaskDialog}
+          onDelete={handleDeleteTask}
+          onEdit={handleUpdateTask}
+          isLoading={isModifyingTask}
+          taskId={selectedTask.id}
+          title={selectedTask.title}
+          status={selectedTask.status}
+        />
+      )}
     </MainLayout>
   );
 }
