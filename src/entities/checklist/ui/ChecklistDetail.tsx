@@ -111,8 +111,6 @@ export const ChecklistDetail = ({
         position: clLength,
       });
       setNewItemTitle("");
-    } catch (error) {
-      console.error("Failed to create checklist item:", error);
     } finally {
       setIsCreating(false);
     }
@@ -138,8 +136,8 @@ export const ChecklistDetail = ({
         title: editTitleValue.trim(),
       });
       setIsEditingTitle(false);
-    } catch (error) {
-      console.error("Failed to update checklist title:", error);
+    } catch {
+      // already handled in service
     }
   };
 
