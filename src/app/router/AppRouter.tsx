@@ -1,15 +1,14 @@
 import {
   BrowserRouter,
-  Routes,
-  Route,
   Navigate,
+  Route,
+  Routes,
   useLocation,
 } from "react-router-dom";
-import { LoginPage } from "../../pages/login";
 import { BlueprintPage } from "../../pages/blueprint";
-import { useAppStore } from "../store";
-import { FullscreenLoader } from "../../shared/ui/loader";
 import { DashboardPage } from "../../pages/dashboard/ui/DashboardPage";
+import { LoginPage } from "../../pages/login";
+import { useAppStore } from "../store";
 
 const AUTH_ROUTES = ["/login"];
 
@@ -42,12 +41,6 @@ function AppRoutes() {
 }
 
 export function AppRouter() {
-  const { isInitialized } = useAppStore();
-
-  if (!isInitialized) {
-    return <FullscreenLoader text="Initializing..." />;
-  }
-
   return (
     <BrowserRouter>
       <AppRoutes />

@@ -1,14 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useAuth } from "../../../entities/user/model/useAuth";
 import { useAppStore } from "../../store";
+import { FullscreenLoader } from "../../../shared/ui";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { isInitialized, setCurrentUser, setIsLoggedIn, setIsInitialized } =
-    useAppStore();
+  const isReady = useRef(false);
+  const { setCurrentUser, setIsLoggedIn } = useAppStore();
   const { getProfile } = useAuth();
 
   useEffect(() => {
-    if (isInitialized) {
+    if (isReady.current) {
       return;
     }
     const initAuth = async () => {
@@ -26,21 +27,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setCurrentUser(null);
         setIsLoggedIn(false);
       } finally {
-        setIsInitialized(true);
+        isReady.current = true;
       }
     };
 
     initAuth();
-  }, [
-    getProfile,
-    isInitialized,
-    setCurrentUser,
-    setIsInitialized,
-    setIsLoggedIn,
-  ]);
+  }, [getProfile, setCurrentUser, setIsLoggedIn]);
 
-  if (!isInitialized) {
-    return null;
+  if (!isReady) {
+    return <FullscreenLoader text="Checking authentication..." />;
   }
 
   return <>{children}</>;
