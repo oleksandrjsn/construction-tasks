@@ -6,5 +6,4 @@ export const AuthContext = createContext<AuthContextValue>({
   isAuthenticated: false,
   login: async () => null,
   logout: async () => {},
-  getProfile: async () => null,
 });

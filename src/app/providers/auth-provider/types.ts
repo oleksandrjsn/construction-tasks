@@ -8,7 +8,6 @@ export interface AuthContextValue {
   isAuthenticated: boolean;
   login: (name: string) => Promise<UserModel | null>;
   logout: () => Promise<void>;
-  getProfile: () => Promise<UserModel | null>;
 }
 
 export interface AuthProviderProps {

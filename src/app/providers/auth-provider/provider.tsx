@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { AuthContextValue, AuthProviderProps } from "./types";
 import { useUserService } from "../../../entities/user/api/useUserService";
 import { FullscreenLoader } from "../../../shared/ui";
@@ -6,8 +6,7 @@ import { AuthContext } from "./context";
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [user, setUser] = useState<AuthContextValue["user"]>(null);
-  const [isRequestPending, setIsRequestPending] = useState(false);
-  const [isRequestCompleted, setIsRequestCompleted] = useState(false);
+  const [isInitializing, setIsInitializing] = useState(true);
 
   const userService = useUserService();
 
@@ -24,28 +23,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     setUser(null);
   };
 
-  const getProfile = useCallback(async () => {
-    setIsRequestPending(true);
-    const profile = await userService.getProfile();
-    setIsRequestCompleted(true);
-    setUser(profile);
-    return profile;
-  }, [userService]);
-
   useEffect(() => {
-    if (isRequestPending) return;
-    getProfile();
-  }, [getProfile, isRequestPending]);
+    let mounted = true;
+
+    const initAuth = async () => {
+      try {
+        await userService.getProfile();
+      } finally {
+        if (mounted) setIsInitializing(false);
+      }
+    };
+
+    initAuth();
+
+    return () => {
+      mounted = false;
+    };
+  }, [userService]);
 
   const contextValue: AuthContextValue = {
     user,
     isAuthenticated: !!user,
     login,
     logout,
-    getProfile,
   };
 
-  if (!isRequestCompleted) {
+  if (isInitializing) {
     return <FullscreenLoader text="Checking authentication..." />;
   }
 
