@@ -1,12 +1,12 @@
-import { useAppStore } from "../../../app/store";
-import { useTasks } from "../model";
+import { useState } from "react";
+import { globalErrorHandler } from "../../../shared/lib/errors/GlobalErrorHandler";
+import { Button, Dialog, Input } from "../../../shared/ui";
+import { useAuth } from "../../user/model/useAuth";
 import blueprintImage from "../assets/blueprint.png";
+import { useTasks } from "../model";
+import { TaskDialog } from "./TaskDialog";
 import { TaskLayer } from "./TaskLayer";
 import type { TaskMarkerProps } from "./TaskMarker";
-import { TaskDialog } from "./TaskDialog";
-import { useState } from "react";
-import { Button, Dialog, Input } from "../../../shared/ui";
-import { globalErrorHandler } from "../../../shared/lib/errors/GlobalErrorHandler";
 
 interface NewTaskDialogState {
   isOpen: boolean;
@@ -39,14 +39,12 @@ export const BlueprintCanvas = () => {
   const [taskDialogState, setTaskDialogState] = useState<TaskDialogState>(
     defaultTaskDialogState
   );
-  const { currentUser } = useAppStore((state) => state);
+  const { user } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isFormTouched, setIsFormTouched] = useState(false);
   const [isModifyingTask, setIsModifyingTask] = useState(false);
 
-  const { tasks, createTask, updateTask, deleteTask } = useTasks(
-    currentUser?.id
-  );
+  const { tasks, createTask, updateTask, deleteTask } = useTasks(user?.id);
 
   const taskMarkers = tasks.map(
     (task): TaskMarkerProps => ({
@@ -87,7 +85,7 @@ export const BlueprintCanvas = () => {
   };
 
   const handleDeleteTask = async () => {
-    const userId = currentUser?.id;
+    const userId = user?.id;
     const taskId = taskDialogState.taskId;
     if (!userId || !taskId) return;
     setIsModifyingTask(true);
@@ -117,7 +115,7 @@ export const BlueprintCanvas = () => {
       return;
     }
 
-    if (!currentUser) {
+    if (!user) {
       return;
     }
 
@@ -125,7 +123,7 @@ export const BlueprintCanvas = () => {
     try {
       await createTask({
         title: newTaskDialogState.title,
-        userId: currentUser.id,
+        userId: user.id,
         position: {
           x: newTaskDialogState.coordinates.x,
           y: newTaskDialogState.coordinates.y,
@@ -140,7 +138,7 @@ export const BlueprintCanvas = () => {
   };
 
   const handleUpdateTask = async (taskId: string, title: string) => {
-    const userId = currentUser?.id;
+    const userId = user?.id;
     if (!userId) return;
 
     setIsModifyingTask(true);

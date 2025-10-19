@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Typography } from "../../../shared/ui";
-import { useAppStore } from "../../store";
 import { useAuth } from "../../../entities/user/model/useAuth";
 import {
   MainNavigation,
@@ -14,14 +13,12 @@ export interface MainLayoutProps {
 }
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
-  const { currentUser, clearState } = useAppStore();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = async () => {
     await logout();
-    clearState();
     setIsUserMenuOpen(false);
   };
 
@@ -52,12 +49,12 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
                 onClick={toggleMobileMenu}
               />
 
-              {currentUser && (
+              {user && (
                 <div className="relative">
-                  <UserProfile user={currentUser} onClick={toggleUserMenu} />
+                  <UserProfile user={user} onClick={toggleUserMenu} />
 
                   <UserMenu
-                    user={currentUser}
+                    user={user}
                     isOpen={isUserMenuOpen}
                     onClose={() => setIsUserMenuOpen(false)}
                     onLogout={handleLogout}

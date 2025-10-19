@@ -1,16 +1,14 @@
 import { useState } from "react";
-import { Button, Input, UserIcon } from "../../../shared/ui";
 import { AuthLayout } from "../../../app/layouts";
 import { useAuth } from "../../../entities/user/model/useAuth";
-import { useAppStore } from "../../../app/store";
 import { globalErrorHandler } from "../../../shared/lib/errors/GlobalErrorHandler";
+import { Button, Input, UserIcon } from "../../../shared/ui";
 
 export function LoginPage() {
   const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const { login } = useAuth();
-  const { setCurrentUser, setIsLoggedIn } = useAppStore();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -27,13 +25,8 @@ export function LoginPage() {
       if (!user) {
         throw new Error("Login failed");
       }
-
-      setCurrentUser(user);
-      setIsLoggedIn(true);
     } catch (error) {
       globalErrorHandler.handleError(error);
-      setCurrentUser(null);
-      setIsLoggedIn(false);
     } finally {
       setIsLoading(false);
     }

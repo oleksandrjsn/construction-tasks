@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { MainLayout } from "../../../app/layouts";
-import { useAppStore } from "../../../app/store";
 import { useTasks } from "../../../entities/task";
-import { Typography, Chip } from "../../../shared/ui";
+import { useAuth } from "../../../entities/user/model/useAuth";
+import { Chip, IconButton, Typography } from "../../../shared/ui";
 
 type ChipVariant = "default" | "primary" | "success" | "warning" | "error";
 
@@ -31,9 +31,9 @@ const formatStatusText = (status: string): string => {
 };
 
 export function DashboardPage() {
-  const { currentUser } = useAppStore((state) => state);
+  const { user } = useAuth();
 
-  const { tasks } = useTasks(currentUser?.id);
+  const { tasks } = useTasks(user?.id);
 
   const metrics = useMemo(() => {
     return tasks.reduce(
@@ -59,8 +59,7 @@ export function DashboardPage() {
       .sort(
         (a, b) =>
           new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-      )
-      .slice(0, 5);
+      );
   }, [tasks]);
 
   return (
@@ -124,9 +123,9 @@ export function DashboardPage() {
               {recentTasks.map((task, index) => (
                 <div
                   key={task.id}
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-lg"
+                  className="flex items-center gap-3 p-4 bg-gray-50 rounded-lg"
                 >
-                  <div>
+                  <div className="flex-1">
                     <Typography
                       variant="body1"
                       color="primary"
@@ -138,6 +137,7 @@ export function DashboardPage() {
                       Last updated: {new Date(task.updatedAt).toLocaleString()}
                     </Typography>
                   </div>
+                  <IconButton></IconButton>
                   <Chip variant={getStatusChipVariant(task.status)}>
                     {formatStatusText(task.status)}
                   </Chip>

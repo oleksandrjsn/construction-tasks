@@ -1,5 +1,5 @@
-import { useAppStore } from "../../../app/store";
 import { Accordion } from "../../../shared/ui";
+import { useAuth } from "../../user/model/useAuth";
 import { useChecklists } from "../model/useChecklists";
 import { ChecklistDetail } from "./ChecklistDetail";
 
@@ -8,9 +8,9 @@ interface ChecklistsProps {
 }
 
 export const Checklists = ({ taskId }: ChecklistsProps) => {
-  const { currentUser } = useAppStore((state) => state);
+  const { user } = useAuth();
 
-  const { checklists } = useChecklists(currentUser?.id, taskId);
+  const { checklists } = useChecklists(user?.id, taskId);
 
   const accordionContent = checklists.map((checklist) => {
     return {
@@ -21,7 +21,7 @@ export const Checklists = ({ taskId }: ChecklistsProps) => {
           title={checklist.title || ""}
           checkListId={checklist.id}
           taskId={taskId}
-          userId={currentUser?.id}
+          userId={user?.id}
         />
       ),
       defaultOpen: true,
