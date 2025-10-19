@@ -9,7 +9,7 @@ export class TaskRepository {
     this.db = db;
   }
 
-  getAll = async (userId: string) => {
+  getAll = async (userId: string): Promise<TaskDocType[]> => {
     const tasks = await this.db.tasks.find({ selector: { userId } }).exec();
 
     return tasks.map((task) => {
@@ -17,7 +17,10 @@ export class TaskRepository {
     });
   };
 
-  getOne = async (userId: string, taskId: string) => {
+  getOne = async (
+    userId: string,
+    taskId: string
+  ): Promise<TaskDocType | null> => {
     const task = await this.db.tasks
       .findOne({ selector: { userId, id: taskId } })
       .exec();
@@ -25,7 +28,7 @@ export class TaskRepository {
     return task ? task.toJSON() : null;
   };
 
-  create = async (taskData: TaskDocType) => {
+  create = async (taskData: TaskDocType): Promise<TaskDocType> => {
     const newTask = await this.db.tasks.insert(taskData);
     return newTask.toJSON();
   };
@@ -34,7 +37,7 @@ export class TaskRepository {
     userId: string,
     taskId: string,
     updateData: Partial<TaskDocType>
-  ) => {
+  ): Promise<TaskDocType> => {
     const task = await this.db.tasks
       .findOne({ selector: { userId, id: taskId } })
       .exec();
@@ -47,7 +50,7 @@ export class TaskRepository {
     return updatedTask.toJSON();
   };
 
-  delete = async (userId: string, taskId: string) => {
+  delete = async (userId: string, taskId: string): Promise<boolean> => {
     const task = await this.db.tasks
       .findOne({ selector: { userId, id: taskId } })
       .exec();
