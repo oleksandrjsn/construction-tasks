@@ -30,7 +30,7 @@ export class UserService {
 
       return user;
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
@@ -57,7 +57,7 @@ export class UserService {
         name: user.name,
       };
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
@@ -65,7 +65,7 @@ export class UserService {
     try {
       await this.sessionService.clearSession();
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 }

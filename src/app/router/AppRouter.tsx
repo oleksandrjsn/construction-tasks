@@ -8,17 +8,18 @@ import {
 import { BlueprintPage } from "../../pages/blueprint";
 import { DashboardPage } from "../../pages/dashboard/ui/DashboardPage";
 import { LoginPage } from "../../pages/login";
-import { useAppStore } from "../store";
+import { useAuth } from "../providers/auth-provider";
 
 const AUTH_ROUTES = ["/login"];
 
 function AppRoutes() {
-  const { isLoggedIn } = useAppStore();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  const shouldNavigateToLogin = !isLoggedIn && location.pathname !== "/login";
+  const shouldNavigateToLogin =
+    !isAuthenticated && !AUTH_ROUTES.includes(location.pathname);
   const shouldNavigateToBlueprint =
-    (isLoggedIn && AUTH_ROUTES.includes(location.pathname)) ||
+    (isAuthenticated && AUTH_ROUTES.includes(location.pathname)) ||
     location.pathname === "/";
 
   return (
@@ -30,7 +31,7 @@ function AppRoutes() {
         <Route
           path="/"
           element={
-            <Navigate to={isLoggedIn ? "/blueprint" : "/login"} replace />
+            <Navigate to={isAuthenticated ? "/blueprint" : "/login"} replace />
           }
         />
       </Routes>

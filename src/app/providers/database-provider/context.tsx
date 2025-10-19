@@ -14,14 +14,11 @@ export const DbProvider = ({ children }: DbProviderProps) => {
   const [isDbLoading, setIsDbLoading] = useState(true);
 
   useEffect(() => {
-    let databaseInstance: DatabaseType | null = null;
-
     const initDb = async () => {
       setIsDbLoading(true);
       try {
         const database = await Database.getInstance().init();
-        databaseInstance = database;
-        setDb(databaseInstance);
+        setDb(database);
         setIsDbReady(true);
       } catch (err) {
         if (import.meta.env.DEV) {
@@ -34,14 +31,6 @@ export const DbProvider = ({ children }: DbProviderProps) => {
     };
 
     initDb();
-
-    return () => {
-      Database.getInstance()
-        .destroy()
-        .catch((err) => {
-          console.error("Error destroying database:", err);
-        });
-    };
   }, []);
 
   const contextValue: DbContextValue = {

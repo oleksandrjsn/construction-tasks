@@ -59,7 +59,7 @@ export class TaskService {
         })
       );
     } catch (error) {
-      return globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
@@ -93,7 +93,7 @@ export class TaskService {
         checklist: { ...checklist, items: checklistItems },
       };
     } catch (error) {
-      return globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
@@ -131,7 +131,7 @@ export class TaskService {
 
       await this.checklistItemRepository.bulkCreate(checklistItemsData);
     } catch (error) {
-      return globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
@@ -145,7 +145,7 @@ export class TaskService {
 
       return await this.taskRepository.update(userId, id, taskData);
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
@@ -153,7 +153,7 @@ export class TaskService {
     try {
       await this.taskRepository.delete(userId, taskId);
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 

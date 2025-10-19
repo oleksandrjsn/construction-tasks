@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { globalErrorHandler } from "../../../shared/lib/errors/GlobalErrorHandler";
 import { Button, Dialog, Input } from "../../../shared/ui";
-import { useAuth } from "../../user/model/useAuth";
 import blueprintImage from "../assets/blueprint.png";
 import { useTasks } from "../model";
 import { TaskDialog } from "./TaskDialog";
 import { TaskLayer } from "./TaskLayer";
 import type { TaskMarkerProps } from "./TaskMarker";
+import { useAuth } from "../../../app/providers/auth-provider";
 
 interface NewTaskDialogState {
   isOpen: boolean;
@@ -93,7 +93,7 @@ export const BlueprintCanvas = () => {
       await deleteTask(userId, taskId);
       handleCloseTaskDialog();
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     } finally {
       setIsModifyingTask(false);
     }
@@ -131,7 +131,7 @@ export const BlueprintCanvas = () => {
       });
       handleCloseNewTaskDialog();
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     } finally {
       setIsLoading(false);
     }
@@ -150,7 +150,7 @@ export const BlueprintCanvas = () => {
         title: title,
       });
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     } finally {
       setIsModifyingTask(false);
     }

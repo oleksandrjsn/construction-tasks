@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { Typography } from "../../../shared/ui";
-import { useAuth } from "../../../entities/user/model/useAuth";
+
 import {
   MainNavigation,
   MobileNavigation,
   MobileMenuButton,
 } from "../../../widgets/navigation";
 import { UserMenu, UserProfile } from "../../../widgets/user-menu";
+import { useAuth } from "../../providers/auth-provider";
 
 export interface MainLayoutProps {
   children: React.ReactNode;

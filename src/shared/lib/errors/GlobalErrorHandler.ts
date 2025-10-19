@@ -41,26 +41,7 @@ class GlobalErrorHandler {
       }
     });
 
-    console.debug("Error handled by interceptors:", preparedError.message);
     return preparedError;
-  }
-
-  async wrapAsync<T>(asyncFn: () => Promise<T>): Promise<T> {
-    try {
-      return await asyncFn();
-    } catch (error) {
-      this.handleError(error);
-      return undefined as T;
-    }
-  }
-
-  wrapSync<T>(syncFn: () => T): T {
-    try {
-      return syncFn();
-    } catch (error) {
-      this.handleError(error);
-      return undefined as T;
-    }
   }
 }
 

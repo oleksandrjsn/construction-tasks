@@ -1,8 +1,8 @@
 import { useMemo } from "react";
 import { MainLayout } from "../../../app/layouts";
 import { useTasks } from "../../../entities/task";
-import { useAuth } from "../../../entities/user/model/useAuth";
 import { Chip, IconButton, Typography } from "../../../shared/ui";
+import { useAuth } from "../../../app/providers/auth-provider";
 
 type ChipVariant = "default" | "primary" | "success" | "warning" | "error";
 
@@ -76,8 +76,8 @@ export function DashboardPage() {
         </div>
 
         {/* Stats Cards */}
-        <div className="flex gap-4">
-          <div className="flex-1 bg-white rounded-lg shadow p-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4  gap-4">
+          <div className="bg-white rounded-lg shadow p-6">
             <Typography variant="h3" color="primary" className="mb-2">
               {metrics.active}
             </Typography>
@@ -85,7 +85,7 @@ export function DashboardPage() {
               Active Tasks
             </Typography>
           </div>
-          <div className="flex-1 bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-lg shadow p-6">
             <Typography variant="h3" color="success" className="mb-2">
               {metrics.completed}
             </Typography>
@@ -93,7 +93,7 @@ export function DashboardPage() {
               Completed Tasks
             </Typography>
           </div>
-          <div className="flex-1 bg-white rounded-lg shadow p-6">
+          <div className=" bg-white rounded-lg shadow p-6">
             <Typography variant="h3" color="warning" className="mb-2">
               {metrics.notStarted}
             </Typography>
@@ -101,7 +101,7 @@ export function DashboardPage() {
               Not Started
             </Typography>
           </div>
-          <div className="flex-1 bg-white rounded-lg shadow p-6">
+          <div className="bg-white rounded-lg shadow p-6">
             <Typography variant="h3" color="error" className="mb-2">
               {metrics.blocked}
             </Typography>

@@ -1,5 +1,5 @@
+import { useAuth } from "../../../app/providers/auth-provider";
 import { Accordion } from "../../../shared/ui";
-import { useAuth } from "../../user/model/useAuth";
 import { useChecklists } from "../model/useChecklists";
 import { ChecklistDetail } from "./ChecklistDetail";
 

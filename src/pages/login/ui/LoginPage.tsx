@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { AuthLayout } from "../../../app/layouts";
-import { useAuth } from "../../../entities/user/model/useAuth";
 import { globalErrorHandler } from "../../../shared/lib/errors/GlobalErrorHandler";
 import { Button, Input, UserIcon } from "../../../shared/ui";
+import { useAuth } from "../../../app/providers/auth-provider";
 
 export function LoginPage() {
   const [username, setUsername] = useState("");
@@ -26,7 +26,7 @@ export function LoginPage() {
         throw new Error("Login failed");
       }
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     } finally {
       setIsLoading(false);
     }

@@ -44,7 +44,7 @@ export class ChecklistService {
         items: items,
       };
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
@@ -57,7 +57,7 @@ export class ChecklistService {
         createdAt: Date.now(),
       });
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
@@ -67,7 +67,7 @@ export class ChecklistService {
 
       return await this.checklistRepository.update(userId, taskId, updateData);
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
@@ -78,7 +78,7 @@ export class ChecklistService {
     try {
       await this.checklistRepository.delete(userId, checklistId);
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
@@ -92,7 +92,7 @@ export class ChecklistService {
         updatedAt: Date.now(),
       });
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
@@ -107,7 +107,7 @@ export class ChecklistService {
         updateData
       );
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
@@ -119,7 +119,7 @@ export class ChecklistService {
     try {
       await this.checklistItemRepository.delete(userId, checklistId, itemId);
     } catch (error) {
-      globalErrorHandler.handleError(error);
+      throw globalErrorHandler.handleError(error);
     }
   };
 
