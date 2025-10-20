@@ -56,6 +56,8 @@ npm run dev
 
 The application will be available at `http://localhost:5173`
 
+> **⚠️ Important Note about Offline Functionality**: The offline features (PWA service worker, offline data sync) **do not work in development mode**. To test offline capabilities, you must build and preview the production version using `npm run build` followed by `npm run preview`.
+
 ### Production Build
 
 To build the application for production:
@@ -78,6 +80,8 @@ To preview the production build locally:
 ```bash
 npm run preview
 ```
+
+**This command is essential for testing offline functionality**, as the service worker and PWA features only work in the production build, not in development mode.
 
 ### Linting
 
