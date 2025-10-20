@@ -246,4 +246,12 @@ The application is configured as a Progressive Web App with:
 
 ## Demo Video
 
-[To be added: Link to demonstration video showing the application features]
+### UI Demo
+
+Watch the user interface demonstration:
+[UI Demo Video](https://www.loom.com/share/dcceb75ec8134cd0a84046bcd0b916f0?sid=343d6170-f3f7-4875-af44-05aaa88818a0)
+
+### Code Base Demo
+
+Explore the code structure and implementation:
+[Code Base Demo Video](https://www.loom.com/share/bf667d7f959e4b4b8e29be186c145b81?sid=9f195658-283c-405f-9e64-28a311b47191)
